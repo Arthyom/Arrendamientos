@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "ng serve -o",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
@@ -18,6 +18,17 @@
     "@angular/platform-browser": "^18.2.0",
     "@angular/platform-browser-dynamic": "^18.2.0",
     "@angular/router": "^18.2.0",
+    "@ionic/angular": "^8.7.11",
+    "@ng-bootstrap/ng-bootstrap": "^17.0.1",
+    "@popperjs/core": "^2.11.8",
+    "@types/file-saver": "^2.0.7",
+    "angular-foundation-6": "^0.11.22",
+    "bootstrap": "^5.3.8",
+    "file-saver": "^2.0.5",
+    "ionicons": "^8.0.13",
+    "jquery": "^3.7.1",
+    "ngx-filesaver": "^21.0.0",
+    "ngx-foundation": "^1.0.8",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.10"
@@ -26,13 +37,18 @@
     "@angular-devkit/build-angular": "^18.2.21",
     "@angular/cli": "^18.2.21",
     "@angular/compiler-cli": "^18.2.0",
+    "@angular/localize": "^18.2.0",
+    "@ionic/angular-toolkit": "latest",
     "@types/jasmine": "~5.1.0",
+    "@types/jquery": "^3.5.33",
+    "foundation-sites": "^6.9.0",
     "jasmine-core": "~5.2.0",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.2.0",
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
+    "sass-loader": "^16.0.6",
     "typescript": "~5.5.2"
   }
 }

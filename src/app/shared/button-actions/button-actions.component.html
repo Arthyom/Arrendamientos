@@ -1,0 +1,17 @@
+<div class="btn-group" role="group" aria-label="Basic mixed styles example">
+  <button type="button" class="btn btn-outline-dark">
+    <ion-icon name="trash"></ion-icon>
+  </button>
+
+  <button type="button"
+  [routerLink]="['../edit', itemId()]"
+  class="btn btn-outline-dark">
+    <ion-icon name="pencil"></ion-icon>
+  </button>
+
+  <button type="button" class="btn btn-outline-dark">
+    <ion-icon name="eye"></ion-icon>
+  </button>
+
+  <ng-content></ng-content>
+</div>

@@ -1,1 +1,209 @@
-<p>create-update works!</p>
+<div>
+
+    <form [formGroup]="formGroupZ">
+
+      @for (gn of groupOfGroups; track $index; let i = $index) {
+
+        <pre>
+          {{gn}}
+        </pre>
+        @for (item of getKeys( formGroupZ.controls[gn]); track $index; let i = $index) {
+          <div [formGroupName]="gn">
+            <pre>
+              {{ item | json }}
+            </pre>
+          </div>
+        }
+
+      }
+
+
+
+  </form>
+
+
+  <form [formGroup]="formGroup">
+    <div ngbAccordion>
+      <div ngbAccordionItem [collapsed]="true">
+        <h2 ngbAccordionHeader>
+          <button ngbAccordionButton>Informacion Basica</button>
+        </h2>
+        <div ngbAccordionCollapse>
+          <div ngbAccordionBody>
+            <ng-template>
+              <div class="row g-3">
+                <div class="col-md-6 col-md-6 col-sm-12">
+                  <div class="form-floating">
+                    <input
+                      [ngClass]="formControlIsValid('nombre')"
+                      formControlName="nombre"
+                      type="email"
+                      class="form-control"
+                      id="floatingInput"
+                      placeholder="name@example.com"
+                    />
+                    <label for="floatingInput">Nombre</label>
+                  </div>
+                </div>
+
+                <div class="col-md-6 col-md-6 col-sm-12">
+                  <div class="form-floating">
+                    <input
+                      type="password"
+                      class="form-control"
+                      id="floatingPassword"
+                      placeholder="Password"
+                    />
+                    <label for="floatingPassword">Apellido Paterno</label>
+                  </div>
+                </div>
+
+                <div class="col-md-6 col-sm-12">
+                  <div class="form-floating">
+                    <input
+                      type="password"
+                      class="form-control"
+                      id="floatingPassword"
+                      placeholder="Password"
+                    />
+                    <label for="floatingPassword">Apellido Materno</label>
+                  </div>
+                </div>
+
+                <div class="col-md-6 col-sm-12">
+                  <div class="form-floating">
+                    <input
+                      type="password"
+                      class="form-control"
+                      id="floatingPassword"
+                      placeholder="Password"
+                    />
+                    <label for="floatingPassword">Direccion</label>
+                  </div>
+                </div>
+
+                <div class="col-md-6 col-sm-12">
+                  <div class="form-floating">
+                    <input
+                      type="password"
+                      class="form-control"
+                      id="floatingPassword"
+                      placeholder="Password"
+                    />
+                    <label for="floatingPassword">Municipio</label>
+                  </div>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                  <div class="form-floating">
+                    <input
+                      type="password"
+                      class="form-control"
+                      id="floatingPassword"
+                      placeholder="Password"
+                    />
+                    <label for="floatingPassword">Colonia</label>
+                  </div>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                  <div class="form-floating">
+                    <input
+                      type="password"
+                      class="form-control"
+                      id="floatingPassword"
+                      placeholder="Password"
+                    />
+                    <label for="floatingPassword">Telefono</label>
+                  </div>
+                </div>
+              </div>
+            </ng-template>
+          </div>
+        </div>
+      </div>
+
+      <div ngbAccordionItem [collapsed]="true">
+        <h2 ngbAccordionHeader>
+          <button ngbAccordionButton>Informacion Adicional</button>
+        </h2>
+        <div ngbAccordionCollapse>
+          <div ngbAccordionBody>
+            <ng-template>
+              <div class="row g-3">
+                <div class="col-md-6 col-md-6 col-sm-12">
+                  <div class="form-floating">
+                    <input
+                      type="password"
+                      class="form-control"
+                      id="floatingPassword"
+                      placeholder="Password"
+                    />
+                    <label for="floatingPassword">Alias</label>
+                  </div>
+                </div>
+
+                <div class="col-md-6 col-md-6 col-sm-12">
+                  <div class="form-floating">
+                    <select
+                      class="form-select"
+                      id="floatingSelect"
+                      aria-label="Floating label select example"
+                    >
+                      <option selected>Propiedad</option>
+                      <option value="1">One</option>
+                      <option value="2">Two</option>
+                      <option value="3">Three</option>
+                    </select>
+                    <label for="floatingSelect">Works with selects</label>
+                  </div>
+                </div>
+              </div>
+            </ng-template>
+          </div>
+        </div>
+      </div>
+
+      <div ngbAccordionItem [collapsed]="true">
+        <h2 ngbAccordionHeader>
+          <button ngbAccordionButton>Informacion Opcional</button>
+        </h2>
+        <div ngbAccordionCollapse>
+          <div ngbAccordionBody>
+            <ng-template>
+              <div class="row g-3">
+                <div class="col-md-6 col-md-6 col-sm-12">
+                  <div class="form-floating">
+                    <input
+                      type="password"
+                      class="form-control"
+                      id="floatingPassword"
+                      placeholder="Password"
+                    />
+                    <label for="floatingPassword">CURP</label>
+                  </div>
+                </div>
+                <div class="col-md-6 col-md-6 col-sm-12">
+                  <div class="form-floating">
+                    <input
+                      type="password"
+                      class="form-control"
+                      id="floatingPassword"
+                      placeholder="Password"
+                    />
+                    <label for="floatingPassword">RFC</label>
+                  </div>
+                </div>
+              </div>
+            </ng-template>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="w-100 ">
+      <div class="btn-group mt-3 w-100" role="group" aria-label="Basic example">
+      <button type="button" class="btn btn-outline-danger">Cancelar</button>
+      <button type="button" class="btn btn-outline-primary">Enviar</button>
+      </div>
+    </div>
+  </form>
+</div>

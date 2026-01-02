@@ -1,1 +1,28 @@
-<h1>index works</h1>
+<app-custom-table [configs]="tableConfigs">
+  @for (arrendador of tableConfigs.tableData; track arrendador; let i = $index)
+  {
+  <tr>
+    <th scope="row">{{ i + 1 }}</th>
+    <td>
+      <!-- <img
+						[src]="'https://upload.wikimedia.org/wikipedia/commons/' + arrendador.flag"
+						[alt]="'The flag of ' + arrendador.name"
+						class="me-2"
+						style="width: 20px"
+					/> -->
+      {{ arrendador.nombre }}
+    </td>
+    <td>{{ arrendador.apellidoPaterno }} {{ arrendador.apellidoMaterno }}</td>
+    <td>
+      <div
+        class="btn-group"
+        role="group"
+        aria-label="Basic mixed styles example"
+      >
+        <app-button-actions>
+        </app-button-actions>
+      </div>
+    </td>
+  </tr>
+  }
+</app-custom-table>

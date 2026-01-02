@@ -1,0 +1,47 @@
+<div class="table-responsive d-none d-lg-block" style="height: 80dvh;" >
+  @if (configs()) {
+
+
+  <table class="
+  table
+  table-hover
+  table-striped
+  table-bordered
+  text-center
+  border-dark
+  ">
+      <thead class="table-dark ">
+          <tr>
+             <th scope="col">#</th>
+            @for ( header of configs().tableHeaders; track header){
+              <th>{{header}}</th>
+            }
+          </tr>
+      </thead>
+
+      <ng-content select=".table-items"></ng-content>
+
+
+  </table>
+  } @else {
+    <p>No configs has been sent</p>
+  }
+</div>
+
+<!-- <div class="d-flex justify-content-between p-2">
+		<ngb-pagination [collectionSize]="(total$ | async)!" [(page)]="service.page" [pageSize]="service.pageSize">
+		</ngb-pagination>
+
+		<select class="form-select" style="width: auto" name="pageSize" [(ngModel)]="service.pageSize">
+			<option [ngValue]="2">2 items per page</option>
+			<option [ngValue]="4">4 items per page</option>
+			<option [ngValue]="6">6 items per page</option>
+		</select>
+	</div> -->
+
+<div ngbScrollSpy #spy="ngbScrollSpy" style="height: 85dvh;">
+  <div  class="d-lg-none d-xl-none d-xxl-none m-md-2">
+        <ng-content select=".card-items"></ng-content>
+  </div>
+</div>
+

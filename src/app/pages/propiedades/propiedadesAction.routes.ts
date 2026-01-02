@@ -1,22 +1,21 @@
-import {Routes} from '@angular/router';
-import {IndexComponent} from './crud/index/index.component';
-import {CreateUpdateComponent} from './crud/create-update/create-update.component';
+import { Routes } from "@angular/router";
+import { IndexComponent } from "./crud/index/index.component";
+import { CreateUpdateComponent } from "./crud/create-update/create-update.component";
 
 export const PropiedadesActionRoutes: Routes = [
   {
-    path: '*/index',
-    component:IndexComponent,
-    title: 'Listado'
+    path: "index",
+    component: IndexComponent,
+    title: "Listado",
   },
   {
-    path: '*/create',
+    path: "create",
     component: CreateUpdateComponent,
-    title: 'Nuevo'
+    title: "Nuevo",
   },
   {
-    path: '*/edit/:id',
+    path: "edit/:id",
     component: CreateUpdateComponent,
-    title: 'Editar'
+    title: "Editar",
   },
-
-]
+];

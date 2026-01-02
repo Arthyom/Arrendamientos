@@ -1,1 +1,73 @@
-<h1>index works</h1>
+<app-infinite-loader [showModal]="showLoader()"></app-infinite-loader>
+
+<app-custom-table [configs]="tableConfigs">
+  <tbody class="table-items">
+    @for (arrendatario of tableConfigs.tableData; track arrendatario; let i =
+    $index) {
+    <tr>
+      <th scope="row">{{ i + 1 }}</th>
+      <td>
+        <!-- <img
+                [src]="'https://upload.wikimedia.org/wikipedia/commons/' + arrendatario.flag"
+                [alt]="'The flag of ' + arrendatario.name"
+                class="me-2"
+                style="width: 20px"
+              /> -->
+        {{ arrendatario.alias }}
+      </td>
+      <!-- <td>
+          {{arrendatario.nombre}}{{ arrendatario.apellidoPaterno }} {{ arrendatario.apellidoMaterno }}
+        </td> -->
+      <td>
+        {{ arrendatario.propiedad?.alias }}
+      </td>
+      <td>
+        <div
+          class="btn-group"
+          role="group"
+          aria-label="Basic mixed styles example"
+        >
+          <app-button-actions
+          [itemId]="arrendatario.id">
+            <button
+              (click)="createReport(arrendatario.id, arrendatario.propiedadId)"
+              type="button"
+              class="btn btn-outline-info border-black"
+            >
+              <ion-icon style="color: black" name="receipt-outline"></ion-icon>
+            </button>
+          </app-button-actions>
+        </div>
+      </td>
+    </tr>
+    }
+  </tbody>
+
+  <div class="card-items">
+    @for (arrendatario of tableConfigs.tableData; track arrendatario; let i =
+    $index) {
+    <app-card-collapsable>
+      <div class="smTitle">{{ arrendatario.alias }}</div>
+      <div class="smBody">
+        <div
+          class="btn-group"
+          role="group"
+          aria-label="Basic mixed styles example"
+        >
+          <app-button-actions
+          [itemId]="arrendatario.id"
+          >
+            <button
+              (click)="createReport(arrendatario.id, arrendatario.propiedadId)"
+              type="button"
+              class="btn btn-outline-info border-black"
+            >
+              <ion-icon style="color: black" name="receipt-outline"></ion-icon>
+            </button>
+          </app-button-actions>
+        </div>
+      </div>
+    </app-card-collapsable>
+    }
+  </div>
+</app-custom-table>

@@ -1,0 +1,18 @@
+  <div ngbAccordion class="my-3">
+    <div ngbAccordionItem>
+      <h2 ngbAccordionHeader>
+        <button ngbAccordionButton>
+          <ng-content select=".smTitle"></ng-content>
+        </button>
+      </h2>
+      <div ngbAccordionCollapse>
+        <div ngbAccordionBody>
+          <ng-template>
+            <div class="d-flex flex-row justify-content-center">
+              <ng-content select=".smBody"></ng-content>
+            </div>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
