@@ -1,73 +1,147 @@
 <app-infinite-loader [showModal]="showLoader()"></app-infinite-loader>
 
+<app-modal-container [showModal]="showMultiReport()">
+  <h6 header>This is the header</h6>
+  <div body>
+    <app-multi-recipient
+      (controlClose)="hideModal($event)"
+      (monthsSelected)="createMultiRecipients($event)"
+    ></app-multi-recipient>
+  </div>
+</app-modal-container>
+
 <app-custom-table [configs]="tableConfigs">
+  <!-- Large screens' section -->
   <tbody class="table-items">
-    @for (arrendatario of tableConfigs.tableData; track arrendatario; let i =
-    $index) {
-    <tr>
-      <th scope="row">{{ i + 1 }}</th>
-      <td>
-        <!-- <img
+    @for (
+      arrendatario of tableConfigs.tableData;
+      track arrendatario;
+      let i = $index
+    ) {
+      <tr>
+        <th scope="row">{{ i + 1 }}</th>
+        <td>
+          <!-- <img
                 [src]="'https://upload.wikimedia.org/wikipedia/commons/' + arrendatario.flag"
                 [alt]="'The flag of ' + arrendatario.name"
                 class="me-2"
                 style="width: 20px"
               /> -->
-        {{ arrendatario.alias }}
-      </td>
-      <!-- <td>
+          {{ arrendatario.alias }}
+        </td>
+        <!-- <td>
           {{arrendatario.nombre}}{{ arrendatario.apellidoPaterno }} {{ arrendatario.apellidoMaterno }}
         </td> -->
-      <td>
-        {{ arrendatario.propiedad?.alias }}
-      </td>
-      <td>
-        <div
-          class="btn-group"
-          role="group"
-          aria-label="Basic mixed styles example"
-        >
-          <app-button-actions
-          [itemId]="arrendatario.id">
-            <button
-              (click)="createReport(arrendatario.id, arrendatario.propiedadId)"
-              type="button"
-              class="btn btn-outline-info border-black"
-            >
-              <ion-icon style="color: black" name="receipt-outline"></ion-icon>
-            </button>
-          </app-button-actions>
-        </div>
-      </td>
-    </tr>
+        <td>
+          {{ arrendatario.propiedad?.alias }}
+        </td>
+        <td>
+          <div
+            class="btn-group"
+            role="group"
+            aria-label="Basic mixed styles example"
+          >
+            <app-button-actions [itemId]="arrendatario.id">
+              <button
+                (click)="
+                  createReport(arrendatario.id, arrendatario.propiedadId)
+                "
+                type="button"
+                class="btn btn-outline-info border-black"
+                ngbTooltip="Recibo Mes Actual"
+              >
+                <ion-icon
+                  style="color: black"
+                  name="receipt-outline"
+                ></ion-icon>
+              </button>
+
+              <button
+                (click)="
+                  openMultiReport(arrendatario.id, arrendatario.propiedadId)
+                "
+                type="button"
+                class="btn btn-outline-success border-black"
+                ngbTooltip="Recibo Mes Especifico"
+              >
+                <ion-icon
+                  style="color: black"
+                  name="file-tray-full-outline"
+                ></ion-icon>
+              </button>
+            </app-button-actions>
+          </div>
+        </td>
+      </tr>
     }
   </tbody>
 
-  <div class="card-items">
-    @for (arrendatario of tableConfigs.tableData; track arrendatario; let i =
-    $index) {
-    <app-card-collapsable>
-      <div class="smTitle">{{ arrendatario.alias }}</div>
-      <div class="smBody">
-        <div
-          class="btn-group"
-          role="group"
-          aria-label="Basic mixed styles example"
-        >
-          <app-button-actions
-          [itemId]="arrendatario.id"
-          >
-            <button
-              (click)="createReport(arrendatario.id, arrendatario.propiedadId)"
-              type="button"
-              class="btn btn-outline-info border-black"
-            >
-              <ion-icon style="color: black" name="receipt-outline"></ion-icon>
-            </button>
-          </app-button-actions>
+  <!-- Small Screens' section -->
+  <div class="card-items p-0">
+    @for (
+      arrendatario of tableConfigs.tableData;
+      track arrendatario;
+      let i = $index
+    ) {
+      <app-card-collapsable>
+        <div class="smTitle d-flex flex-column gap-1 pt-0">
+          <span class="fw-bolder">
+              <ion-icon name="business" class="text-info fs-5"></ion-icon>
+            <ion-icon name="car" class="text-warning"></ion-icon>
+            <ion-icon name="storefront" class="text-success"></ion-icon>
+            <ion-icon name="home" class="text-primary"></ion-icon>  {{ arrendatario.alias }}
+
+            <ion-icon
+            ngbTooltip="Mes Pagado"
+            style="font-size: 20px;"
+
+            name="checkmark-circle" class="text-success "></ion-icon>
+            <ion-icon
+            name="close-circle" class="text-danger "></ion-icon>
+
+
+          </span>
+          <span class="text-muted" style="font-size: 12px;">{{arrendatario.propiedad?.direccion}}</span>
         </div>
-      </div>
-    </app-card-collapsable>
+        <div class="smBody">
+          <div
+            class="btn-group"
+            role="group"
+            aria-label="Basic mixed styles example"
+          >
+            <app-button-actions [itemId]="arrendatario.id">
+              <button
+                (click)="
+                  createReport(arrendatario.id, arrendatario.propiedadId)
+                "
+                type="button"
+                class="btn btn-outline-success border-black"
+                ngbTooltip="Recibo Mes Escpecifico"
+                placement="start"
+              >
+                <ion-icon
+                  style="color: black"
+                  name="receipt-outline"
+                ></ion-icon>
+              </button>
+              <button
+                (click)="
+                  openMultiReport(arrendatario.id, arrendatario.propiedadId)
+                "
+                type="button"
+                class="btn btn-outline-success border-black"
+                ngbTooltip="Recibo Mes Escpecifico"
+                placement="start"
+              >
+                <ion-icon
+                  style="color: black"
+                  name="file-tray-full-outline"
+                ></ion-icon>
+              </button>
+            </app-button-actions>
+          </div>
+        </div>
+      </app-card-collapsable>
     }
   </div>
 </app-custom-table>

@@ -12,7 +12,10 @@ import { Recibo } from '../../../../models/Entities/recibo';
 import { NgTemplateOutlet } from "../../../../../../node_modules/@angular/common/index";
 import { CardCollapsableComponent } from "../../../../shared/card-collapsable/card-collapsable.component";
 import { NgbSlide } from "../../../../../../node_modules/@ng-bootstrap/ng-bootstrap/carousel/carousel";
-import { NgbAccordionBody, NgbAccordionButton, NgbAccordionCollapse, NgbAccordionDirective, NgbAccordionHeader, NgbAccordionItem, NgbAccordionToggle } from '@ng-bootstrap/ng-bootstrap';
+import { NgbAccordionBody, NgbAccordionButton, NgbAccordionCollapse, NgbAccordionDirective, NgbAccordionHeader, NgbAccordionItem, NgbAccordionToggle, NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
+import { ModalContainerComponent } from '../../../../shared/modal-container/modal-container.component';
+import { MultiRecipientComponent } from '../../componentes/multi-recipient/multi-recipient.component';
+import { IMonthResponse } from '../../interfaces/IMonthResponse';
 
 
 @Component({
@@ -31,15 +34,23 @@ import { NgbAccordionBody, NgbAccordionButton, NgbAccordionCollapse, NgbAccordio
 		NgbAccordionToggle,
 		NgbAccordionBody,
 		NgbAccordionCollapse,
-
+    ModalContainerComponent,
+    MultiRecipientComponent,
+    NgbTooltip
 ],
   templateUrl: './index.component.html',
   styleUrl: './index.component.scss',
 })
 export class IndexComponent implements OnInit {
+
   private _arrendatariosService = inject(ServiceArrDataRequester);
   private _propiedadService = inject(ServiceArrDataRequester);
-  public showLoader = signal(false);
+
+  public showLoader = signal(true);
+  public showMultiReport = signal(false);
+  public signalArrendatarioId = signal(0);
+  public signalPropiedadId = signal(0);
+
 
   resourceName = input.required<string>();
 
@@ -48,6 +59,62 @@ export class IndexComponent implements OnInit {
     tableTitle: 'Arrendatarios',
     tableData: [],
   };
+
+
+  hideModal($event: any) {
+    this.showMultiReport.update( ()=> !$event)
+  }
+
+  async createMultiRecipients($event: IMonthResponse){
+
+    console.log('events', $event)
+    const promises : Promise<Recibo>[] = [];
+
+    this.hideModal(true);
+    this.showLoader.update( ()=> true)
+
+    const recibos = $event.months.map( month =>{
+       const recibo: Recibo ={
+        propiedadId: this.signalArrendatarioId(),
+        identificador:'test',
+        arrendadorId:1,
+        arrendatarioId: this.signalArrendatarioId(),
+        pagado: true,
+        id:0,
+        fechaPago: `${$event.year}-${month.id.toString().padStart(2, '0')}-01`
+       }
+       return recibo;
+    });
+
+    for (const recibo of recibos) {
+      promises.push(
+        firstValueFrom(
+          await
+          this._arrendatariosService.post<Recibo>('recibos', recibo)
+        )
+      );
+    }
+
+    for (const promise of promises) {
+      const r = await promise;
+
+      console.log('this is the already resolved promise', r)
+
+      const reciboDoc =   await this._arrendatariosService.getByIdAsBlob('recibos/documento', r.id);
+    }
+
+    this.showLoader.update( ()=> false)
+
+
+
+
+  }
+
+  openMultiReport(arrId:number, propId:number) {
+    this.signalArrendatarioId.update( () => arrId);
+    this.signalPropiedadId.update( () => propId)
+    this.showMultiReport.update(  () => true)
+  }
 
   async createReport(arrendatarioId: number, propiedadId: number) {
     this.showLoader.update(x => x = true)
@@ -69,7 +136,7 @@ export class IndexComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.showLoader.update((x) => (x = true));
+    this.showLoader.update((x) => true);
     (
       await this._arrendatariosService.getAll<Arrendatario>(this.resourceName())
     ).subscribe((data) => {
@@ -84,7 +151,7 @@ export class IndexComponent implements OnInit {
           );
         }
       });
-      this.showLoader.update((x) => (x = false));
+      this.showLoader.update((x) => false);
     });
   }
 }

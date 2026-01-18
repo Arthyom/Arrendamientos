@@ -1,0 +1,9 @@
+
+<ng-template #contentModalContainer let-modal>
+    <div class="modal-header">
+      <ng-content select="[header]"></ng-content>
+    </div>
+    <div class="modal-body">
+      <ng-content select="[body]"></ng-content>
+    </div>
+</ng-template>

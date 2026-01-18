@@ -1,16 +1,22 @@
 <div class="btn-group" role="group" aria-label="Basic mixed styles example">
-  <button type="button" class="btn btn-outline-dark">
-    <ion-icon name="trash"></ion-icon>
+  <button type="button" class="btn btn-outline-danger border-black"
+  ngbTooltip="Borrar"
+  >
+    <ion-icon name="trash" style="color: black"></ion-icon>
   </button>
 
   <button type="button"
   [routerLink]="['../edit', itemId()]"
-  class="btn btn-outline-dark">
-    <ion-icon name="pencil"></ion-icon>
+  class="btn  btn-outline-warning border-black"
+  ngbTooltip="Editar"
+  >
+    <ion-icon name="pencil" style="color: black"></ion-icon>
   </button>
 
-  <button type="button" class="btn btn-outline-dark">
-    <ion-icon name="eye"></ion-icon>
+  <button type="button" class="btn btn-outline-info border-black"
+    ngbTooltip="Visualizar"
+>
+    <ion-icon name="eye" style="color: black"></ion-icon>
   </button>
 
   <ng-content></ng-content>

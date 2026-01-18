@@ -1,28 +1,45 @@
 <div>
+  <form [formGroup]="formGroupZ">
+    <div ngbAccordion>
+      @for (item of formGroupZ.controls | keyvalue; track $index; let i =
+      $index) {
+      <div ngbAccordionItem [collapsed]="true">
+        <h2 ngbAccordionHeader>
+          <button ngbAccordionButton>{{ item.key }}</button>
+        </h2>
 
-    <form [formGroup]="formGroupZ">
+        <div ngbAccordionCollapse>
+          <div ngbAccordionBody>
+            <ng-template>
+              <div class="row g-3" [formGroupName]="item.key">
+                @for(elem of [item.value]; track $index ; let j = $index){
 
-      @for (gn of groupOfGroups; track $index; let i = $index) {
+                @for(elz of elem.value | keyvalue; track $index; let z = $index
+                ){
+                <div class="col-md-6 col-md-6 col-sm-12">
+                  <div class="form-floating">
+                    <input
+                      [ngClass]="currentFormControlIsValid(item.key, elz.key)"
+                      [formControlName]="getValue(elz.key)"
+                      type="email"
+                      class="form-control"
+                      placeholder="name@example.com"
+                    />
+                    <label>{{ elz.key }}</label>
+                  </div>
+                </div>
 
-        <pre>
-          {{gn}}
-        </pre>
-        @for (item of getKeys( formGroupZ.controls[gn]); track $index; let i = $index) {
-          <div [formGroupName]="gn">
-            <pre>
-              {{ item | json }}
-            </pre>
+                } }
+              </div>
+            </ng-template>
           </div>
-        }
-
+        </div>
+      </div>
       }
-
-
-
+    </div>
   </form>
 
-
-  <form [formGroup]="formGroup">
+  <!-- <form [formGroup]="formGroup">
     <div ngbAccordion>
       <div ngbAccordionItem [collapsed]="true">
         <h2 ngbAccordionHeader>
@@ -199,11 +216,11 @@
       </div>
     </div>
 
-    <div class="w-100 ">
+    <div class="w-100">
       <div class="btn-group mt-3 w-100" role="group" aria-label="Basic example">
-      <button type="button" class="btn btn-outline-danger">Cancelar</button>
-      <button type="button" class="btn btn-outline-primary">Enviar</button>
+        <button type="button" class="btn btn-outline-danger">Cancelar</button>
+        <button type="button" class="btn btn-outline-primary">Enviar</button>
       </div>
     </div>
-  </form>
+  </form> -->
 </div>
