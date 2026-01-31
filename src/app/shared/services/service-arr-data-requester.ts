@@ -64,4 +64,14 @@ export class ServiceArrDataRequester {
       data
     );
   }
+
+  public async put<TData>(
+    resourceName: string,
+    data: TData
+  ): Promise<Observable<TData>> {
+    return this._httpCliente.put<TData>(
+      `${environment.backEndBaseUrl}/${resourceName}`,
+      data
+    );
+  }
 }

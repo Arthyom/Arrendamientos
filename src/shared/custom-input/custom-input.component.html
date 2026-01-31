@@ -1,0 +1,109 @@
+<div class="col-md-6 col-md-6 col-sm-12">
+  <div class="form-floating" >
+    <!-- <pre>
+      {{customFormControl().control.valid}}
+    </pre> -->
+
+    @switch (customFormControl().type) {
+      @case (customControlTypes.number) {
+        <!-- <input
+
+        [ngClass]="currentFormControlIsValid(item.key, itemControll.key)"
+        [min]="customFormControl().min"
+        [max]="customFormControl().max"
+        [pattern]="customFormControl().pattern || ''"
+        [maxLength]="customFormControl().maxLength"
+        [minLength]="customFormControl().minLength"
+        [formControlName]="customFormControl().control."
+        [type]="customFormControl().type"
+        class="form-control"
+      /> -->
+
+        <input
+          [ngClass]="{'is-invalid': customFormControl().control.valid && customFormControl().control.touched}"
+          [placeholder]="customFormControl().label"
+          [min]="customFormControl().min"
+          [max]="customFormControl().max"
+          [pattern]="customFormControl().pattern || ''"
+          [maxLength]="customFormControl().maxLength"
+          [minLength]="customFormControl().minLength"
+          [type]="customFormControl().type"
+          class="form-control"
+        />
+      }
+
+      @case (customControlTypes.comboIntegerInteger) {
+        <select
+          class="form-select"
+          id="floatingSelect"
+          aria-label="Floating label select example"
+        >
+          <option selected>Open this select menu</option>
+          @for (
+            aditionalKeyValue of customFormControl().additionalData;
+            track $index
+          ) {
+            <option [id]="aditionalKeyValue.key">
+              {{ aditionalKeyValue.value }}
+            </option>
+          }
+        </select>
+      }
+
+      @case (customControlTypes.textPhone) {
+        <input
+          [ngClass]="{'is-invalid': customFormControl().control.valid}"
+          [placeholder]="customFormControl().label"
+          [min]="customFormControl().min"
+          [max]="customFormControl().max"
+          [pattern]="customFormControl().pattern || ''"
+          [maxLength]="customFormControl().maxLength"
+          [minLength]="customFormControl().minLength"
+          [type]="customFormControl().type"
+          class="form-control"
+        />
+      }
+
+      @case (customControlTypes.textArea) {
+        <textarea class="form-control" style="height: 80px"></textarea>
+      }
+
+      @case (customControlTypes.checkBox) {
+        <input
+          [min]="customFormControl().min"
+          [max]="customFormControl().max"
+          [pattern]="customFormControl().pattern || ''"
+          [maxLength]="customFormControl().maxLength"
+          [minLength]="customFormControl().minLength"
+          [type]="customFormControl().type"
+          class="form-control"
+        />
+      }
+
+      @case (customControlTypes.radioButton) {
+        <input
+          [min]="customFormControl().min"
+          [max]="customFormControl().max"
+          [pattern]="customFormControl().pattern || ''"
+          [maxLength]="customFormControl().maxLength"
+          [minLength]="customFormControl().minLength"
+          [type]="customFormControl().type"
+          formControlName="alias"
+          class="form-control"
+        />
+      }
+
+      @default {
+        <input
+          [ngClass]="{'is-invalid': customFormControl().control.valid && customFormControl().control.touched}"
+          [placeholder]="customFormControl().label"
+          formControlName="alias"
+          [type]="customFormControl().type"
+          class="form-control"
+        />
+      }
+    }
+
+    <label>{{ customFormControl().label }}</label>
+  </div>
+</div>

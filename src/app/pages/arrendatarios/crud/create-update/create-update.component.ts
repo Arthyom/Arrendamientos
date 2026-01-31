@@ -1,128 +1,245 @@
-import { CommonModule, JsonPipe } from '@angular/common';
-import { Component, inject, input } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { NgbAccordionButton, NgbAccordionDirective, NgbAccordionItem, NgbAccordionHeader, NgbAccordionToggle, NgbAccordionBody, NgbAccordionCollapse } from '@ng-bootstrap/ng-bootstrap';
+import { CommonModule, JsonPipe, Location } from '@angular/common';
+import {
+  Component,
+  inject,
+  input,
+  signal,
+  OnInit,
+  AfterViewInit,
+} from '@angular/core';
+import {
+  FormArray,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import {
+  NgbAccordionButton,
+  NgbAccordionDirective,
+  NgbAccordionItem,
+  NgbAccordionHeader,
+  NgbAccordionToggle,
+  NgbAccordionBody,
+  NgbAccordionCollapse,
+} from '@ng-bootstrap/ng-bootstrap';
 import { ICommonCustomForm } from '../../../../models/Interfaces/ICommonFormCustom';
 import { ICommonFormGroup } from '../../../../models/Interfaces/ICommonFormGroup';
+import { EnumCommonFormControllType } from '../../../../models/Interfaces/ECommonFormControllType';
+import { CustomFormComponent } from '../../../../shared/custom-form/custom-form.component';
+import { InfiniteLoaderComponent } from '../../../../shared/infinite-loader/infinite-loader.component';
+import { ServiceArrDataRequester } from '../../../../shared/services/service-arr-data-requester';
+import { Propiedad } from '../../../../models/Entities/propiedad';
+import { firstValueFrom } from 'rxjs';
+import { IKeyValue } from '../../../../models/Interfaces/IKeyValue';
+import { InfiniteLoaderService } from '../../../../../shared/services/infinite-loader-service';
+import { ActivatedRoute } from '@angular/router';
+import { Arrendatario } from '../../../../models/Entities/arrendatario';
+import { MapperFormValues } from '../../../../models/Mappers/MapperFormValues';
 
 @Component({
   selector: 'app-create-update',
   standalone: true,
   imports: [
-    NgbAccordionButton,
-		NgbAccordionDirective,
-		NgbAccordionItem,
-		NgbAccordionHeader,
-		NgbAccordionToggle,
-		NgbAccordionBody,
-		NgbAccordionCollapse,
     FormsModule,
     ReactiveFormsModule,
-    JsonPipe,
-    CommonModule
+    CommonModule,
+    CustomFormComponent,
   ],
   templateUrl: './create-update.component.html',
-  styleUrl: './create-update.component.scss'
+  styleUrl: './create-update.component.scss',
 })
-export class CreateUpdateComponent {
+export class CreateUpdateComponent implements OnInit {
+  t = EnumCommonFormControllType;
 
+  private _service = inject(ServiceArrDataRequester);
+  private _inf = inject(InfiniteLoaderService);
+  private _router = inject(ActivatedRoute);
+  private _location = inject(Location);
 
-    formGroupZ :  FormGroup;
+  url = signal<string>('arrendatarios');
 
-
-
-   private _fb = inject(FormBuilder);
-
-   s: ICommonCustomForm = {
-    groups:{
-
-      infoBase:{
-        label:'Info. Basica',
+  s = signal<ICommonCustomForm>({
+    groups: {
+      infoBase: {
+        order: 1,
+        label: 'Info. Basica',
         controlls: {
-          nombre:{ type:"text", label: "Nombre", control: new FormControl() },
-          apellidoPaterno: {type:'number', label:'Apellido Paterno', control: new FormControl()},
-          apellidoMaterno: {type:'text', label:'Apellido Materno', control: new FormControl()},
-          direccion:{type:'text', label:'Direccion', control: new FormControl()},
-          municipio:{type:'text', label:'Municipio', control: new FormControl()},
-          colonia:{type:'text', label:'Colonia', control: new FormControl()},
-          cp:{type:'text', label:'Codigo Postal', control: new FormControl()},
-          telefono:{type:'phone', label:'Telefono ', control: new FormControl()},
-        }
+          id:{
+            order: 0,
+            label: 'ID',
+            control: new FormControl( null, Validators.required),
+            hidden: true,
+          },
+          nombre: {
+            order:3,
+            label: 'Nombre',
+            control: new FormControl(null, Validators.required),
+          },
+          apellidoPaterno: {
+            order:1,
+            label: 'Apellido Paterno',
+            control: new FormControl(null, Validators.required),
+          },
+          apellidoMaterno: {
+            order:2,
+            label: 'Apellido Materno',
+            control: new FormControl(null, Validators.required),
+          },
+          direccion: {
+            order:4,
+            label: 'Direccion',
+            control: new FormControl(null, Validators.required),
+          },
+          municipio: {
+            order:6,
+            label: 'Municipio',
+            control: new FormControl(null, Validators.required),
+          },
+          colonia: {
+            order:5,
+            label: 'Colonia',
+            control: new FormControl(null, Validators.required),
+          },
+          cp: {
+            order:7,
+            min: 0,
+            max: 99999,
+            maxLength: 5,
+            minLength: 5,
+            pattern: '[0-9]{5}',
+            label: 'Codigo Postal',
+            control: new FormControl(null, [
+              Validators.required,
+              // Validators.min(0),
+              // Validators.max(99999),
+            ]),
+          },
+          telefono: {
+            order:8,
+            maxLength: 10,
+            type: this.t.textPhone,
+            label: 'Telefono ',
+            control: new FormControl(null, [
+              Validators.required,
+              // Validators.pattern('[0-9]{3}-[0-9]{2}-[0-9]{3}'),
+            ]),
+          },
+        },
       },
 
-      infoAdicional:{
-        label:'Info. Adicional',
-        controlls:{
-          alias: {type:'text', label:'Alias', control: new FormControl()},
-          propiedadId: {type:'select', label:'Propiedad', control: new FormControl()},
-
-        }
+      infoAdicional: {
+        order: 2,
+        label: 'Info. Adicional',
+        controlls: {
+          alias: {
+            label: 'Alias',
+            control: new FormControl(null, Validators.required),
+            additionalData: [{ key: 'placeholder', value: 'Como lo conoces?' }],
+          },
+          propiedadId: {
+            type: this.t.comboIntegerInteger,
+            label: 'Propiedad',
+            control: new FormControl( null, Validators.required),
+          },
+        },
       },
 
-      infoOpcional:{
-        label:'Info. Opcional',
-        controlls:{
-          email: {type:'text', label:'Email', control: new FormControl()},
-          curp: {type:'text', label:'CURP', control: new FormControl()},
-          rfc: {type:'text', label:'RFC', control: new FormControl()}
-        }
-      }
-    }
-   }
+      infoOpcional: {
+        order: 3,
+        label: 'Info. Opcional',
+        controlls: {
+          email: {
+            label: 'Email',
+            control: new FormControl(null, Validators.email),
+          },
+          curp: {
+            label: 'CURP',
+            control: new FormControl(),
+          },
+          rfc: {
+            label: 'RFC',
+            control: new FormControl(),
+          },
+        },
+      },
+    },
+  });
 
+  async ngOnInit() {
+    this._inf.showLoader.set(true);
 
-  constructor(  ) {
+    const r = await firstValueFrom(
+      await this._service.getAll<Propiedad>('propiedades'),
+    );
 
-    this.formGroupZ = this._fb.group({
-        basic:  this._fb.group({
-            nombre: [, Validators.required],
-            apellido: ['', Validators.required],
+    const id = Number(this._router.snapshot.paramMap.get('id'));
 
-          }),
+    this.url.update(value => `${value}/${id}`);
 
-        second: this._fb.group({
-            propiedad: ['', Validators.required],
-          }),
+    const ar = await firstValueFrom(
+      await this._service.getById<Arrendatario>('arrendatarios', id),
+    );
 
-        optional : this._fb.group({
-            curp: ['', Validators.required],
-          })
+    const propiedades = r.map<IKeyValue>((x) => ({
+      key: x.id.toString(),
+      value: x.direccion,
+    }));
 
+    this.s.update((currentS) => {
+      currentS.groups['infoAdicional'].controlls['propiedadId'].additionalData =
+       [ {key:null, value:'No Asignado'} ,...propiedades ];
+      currentS.groups['infoBase'].controlls['nombre'].control.setValue(
+        ar.nombre,
+      );
+      currentS.groups['infoBase'].controlls['apellidoPaterno'].control.setValue(
+        ar.apellidoPaterno,
+      );
+      currentS.groups['infoBase'].controlls['apellidoMaterno'].control.setValue(
+        ar.apellidoMaterno,
+      );
+      currentS.groups['infoBase'].controlls['direccion'].control.setValue(
+        ar.direccion,
+      );
+      currentS.groups['infoBase'].controlls['municipio'].control.setValue(
+        ar.municipio,
+      );
+      currentS.groups['infoBase'].controlls['colonia'].control.setValue(
+        ar.colonia,
+      );
+        currentS.groups['infoBase'].controlls['id'].control.setValue(
+        ar.id,
+      );
+      // currentS.groups['infoBase'].controlls['cp'].control.setValue(ar.);
+      // currentS.groups['infoBase'].controlls['telefono'].control.setValue(ar.te);
+      currentS.groups['infoAdicional'].controlls['alias'].control.setValue(
+        ar.alias,
+      );
+      currentS.groups['infoAdicional'].controlls[
+        'propiedadId'
+      ].control.setValue(ar.propiedadId);
+      // currentS.groups['infoOpcional'].controlls['email'].control.setValue(ar.e);
+      return currentS;
     });
 
-
-
+    this._inf.showLoader.set(false);
   }
 
-  getValue(input: any){
-    return input as string;
-  }
+  async submitForm(data: any) {
+    try {
+     const mapped = MapperFormValues.fromObject<Arrendatario>(data);
+      this._inf.showLoader.set(true);
+      const id = Number(this._router.snapshot.paramMap.get('id'));
+      const s = await firstValueFrom(
+        await this._service.put<Arrendatario>(`arrendatarios/${id}`, mapped),
+      );
+    } catch (error) {
+    } finally {
 
-
-    get groupOfGroups(){
-    return Object.keys( this.formGroupZ.controls );
-  }
-
-  getKeys( source:any,  ){
-        return Object.keys( source.controls );
-  }
-
-
-
-  getValues( source: FormGroup ){
-      return source.controls
-  }
-
-  getGroup(key:string){
-    return this.formGroupZ.get(key) as FormGroup;
-  }
-
-   getGroupArr(key:string){
-    return this.formGroupZ.get(key) as FormArray;
-  }
-
-  currentFormControlIsValid( section: string, field: any){
-    const control = this.formGroupZ.controls[section].get(field);
-    return  control?.valid || !control?.touched ? '' : 'is-invalid';
+      this._inf.showLoader.set(false);
+      this._location.back();
+    }
   }
 }

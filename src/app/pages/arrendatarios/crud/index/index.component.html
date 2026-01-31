@@ -1,7 +1,6 @@
-<app-infinite-loader [showModal]="showLoader()"></app-infinite-loader>
 
 <app-modal-container [showModal]="showMultiReport()">
-  <h6 header>This is the header</h6>
+  <h3 class="fw-bold  w-100 text-center" header>Seleccione año y meses</h3>
   <div body>
     <app-multi-recipient
       (controlClose)="hideModal($event)"
@@ -85,23 +84,12 @@
     ) {
       <app-card-collapsable>
         <div class="smTitle d-flex flex-column gap-1 pt-0">
-          <span class="fw-bolder">
-              <ion-icon name="business" class="text-info fs-5"></ion-icon>
-            <ion-icon name="car" class="text-warning"></ion-icon>
-            <ion-icon name="storefront" class="text-success"></ion-icon>
-            <ion-icon name="home" class="text-primary"></ion-icon>  {{ arrendatario.alias }}
-
-            <ion-icon
-            ngbTooltip="Mes Pagado"
-            style="font-size: 20px;"
-
-            name="checkmark-circle" class="text-success "></ion-icon>
-            <ion-icon
-            name="close-circle" class="text-danger "></ion-icon>
-
-
-          </span>
+          <app-arrendatario-icon-tool
+          [title]="arrendatario.alias"
+          [typeProperty]="arrendatario.propiedad?.typeProperty">
+        </app-arrendatario-icon-tool>
           <span class="text-muted" style="font-size: 12px;">{{arrendatario.propiedad?.direccion}}</span>
+          <span class="text-muted" style="font-size: 12px;">{{arrendatario.propiedad?.id}}</span>
         </div>
         <div class="smBody">
           <div

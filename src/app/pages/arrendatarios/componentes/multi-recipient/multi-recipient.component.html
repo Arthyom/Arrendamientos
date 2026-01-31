@@ -1,13 +1,13 @@
 <div class="row">
   <div class="row m-0">
     <select
-     [(ngModel)]="yearStart"
+      [(ngModel)]="yearStart"
       class="form-select form-select-lg mb-3"
       aria-label=".form-select-lg example"
     >
       <option selected>Seleccione el Año</option>
       @for (year of [2024, 2025, 2026]; track year) {
-        <option [value]="year"  >{{ year }}</option>
+        <option [value]="year">{{ year }}</option>
       }
     </select>
   </div>
@@ -18,10 +18,11 @@
         @for (month of monthNames.slice(col, col + 6); track month.id) {
           <div class="form-check form-switch">
             <input
-            [(ngModel)]="month.selected"
-            class="form-check-input"
-            type="checkbox"
-            [id]="month.id" />
+              [(ngModel)]="month.selected"
+              class="form-check-input"
+              type="checkbox"
+              [id]="month.id"
+            />
             <label class="form-check-label" [for]="month.id">
               {{ month.name }}
             </label>
@@ -34,13 +35,17 @@
   <div class="row m-0 mt-3">
     <div class="col">
       <button
-      (click)="controlClose.emit(true)"
-      class="btn btn-danger w-100" type="button">No</button>
+        (click)="controlClose.emit(true)"
+        class="d-flex justify-content-center btn btn-danger w-100"
+        type="button"
+      >
+        <ion-icon name="close-circle" size="large"></ion-icon>
+      </button>
     </div>
     <div class="col">
-      <button
-      (click)="ok()"
-      class="btn btn-primary w-100" type="button">Ok</button>
+      <button (click)="ok()" class=" d-flex justify-content-center btn btn-primary w-100 " type="button">
+        <ion-icon name="checkmark-circle"  size="large"></ion-icon>
+      </button>
     </div>
   </div>
 </div>

@@ -16,6 +16,8 @@ import { NgbAccordionBody, NgbAccordionButton, NgbAccordionCollapse, NgbAccordio
 import { ModalContainerComponent } from '../../../../shared/modal-container/modal-container.component';
 import { MultiRecipientComponent } from '../../componentes/multi-recipient/multi-recipient.component';
 import { IMonthResponse } from '../../interfaces/IMonthResponse';
+import { ArrendatarioIconToolComponent } from "../../componentes/arrendatario-icon-tool/arrendatario-icon-tool.component";
+import { InfiniteLoaderService } from '../../../../../shared/services/infinite-loader-service';
 
 
 @Component({
@@ -27,16 +29,17 @@ import { IMonthResponse } from '../../interfaces/IMonthResponse';
     ButtonActionsComponent,
     IonIcon,
     CardCollapsableComponent,
-    		NgbAccordionButton,
-		NgbAccordionDirective,
-		NgbAccordionItem,
-		NgbAccordionHeader,
-		NgbAccordionToggle,
-		NgbAccordionBody,
-		NgbAccordionCollapse,
+    NgbAccordionButton,
+    NgbAccordionDirective,
+    NgbAccordionItem,
+    NgbAccordionHeader,
+    NgbAccordionToggle,
+    NgbAccordionBody,
+    NgbAccordionCollapse,
     ModalContainerComponent,
     MultiRecipientComponent,
-    NgbTooltip
+    NgbTooltip,
+    ArrendatarioIconToolComponent
 ],
   templateUrl: './index.component.html',
   styleUrl: './index.component.scss',
@@ -46,7 +49,8 @@ export class IndexComponent implements OnInit {
   private _arrendatariosService = inject(ServiceArrDataRequester);
   private _propiedadService = inject(ServiceArrDataRequester);
 
-  public showLoader = signal(true);
+
+  private _inf = inject(InfiniteLoaderService);
   public showMultiReport = signal(false);
   public signalArrendatarioId = signal(0);
   public signalPropiedadId = signal(0);
@@ -71,7 +75,7 @@ export class IndexComponent implements OnInit {
     const promises : Promise<Recibo>[] = [];
 
     this.hideModal(true);
-    this.showLoader.update( ()=> true)
+    this._inf.showLoader.update( ()=> true)
 
     const recibos = $event.months.map( month =>{
        const recibo: Recibo ={
@@ -103,7 +107,7 @@ export class IndexComponent implements OnInit {
       const reciboDoc =   await this._arrendatariosService.getByIdAsBlob('recibos/documento', r.id);
     }
 
-    this.showLoader.update( ()=> false)
+    this._inf.showLoader.update( ()=> false)
 
 
 
@@ -117,7 +121,7 @@ export class IndexComponent implements OnInit {
   }
 
   async createReport(arrendatarioId: number, propiedadId: number) {
-    this.showLoader.update(x => x = true)
+    this._inf.showLoader.update(x => x = true)
     const data: Recibo = {
       propiedadId,
       identificador: 'ss',
@@ -132,11 +136,11 @@ export class IndexComponent implements OnInit {
 
     const recibo =   await this._arrendatariosService.getByIdAsBlob('recibos/documento', response.id);
 
-    this.showLoader.update(x => x = false);
+    this._inf.showLoader.update(x => x = false);
   }
 
   async ngOnInit() {
-    this.showLoader.update((x) => true);
+    this._inf.showLoader.update((x) => true);
     (
       await this._arrendatariosService.getAll<Arrendatario>(this.resourceName())
     ).subscribe((data) => {
@@ -151,7 +155,7 @@ export class IndexComponent implements OnInit {
           );
         }
       });
-      this.showLoader.update((x) => false);
+      this._inf.showLoader.update((x) => false);
     });
   }
 }

@@ -1,0 +1,211 @@
+  <div ngbScrollSpy #spy="ngbScrollSpy" style="height: 88dvh">
+    <form [formGroup]="generalFormGroup">
+      <div ngbAccordion>
+        @for (
+          item of inputSchema().groups | keyvalue;
+          track $index;
+          let i = $index
+        ) {
+          <div ngbAccordionItem [collapsed]="true">
+            <h2 ngbAccordionHeader>
+              <button ngbAccordionButton>{{ item.value.label }}</button>
+            </h2>
+
+            <div ngbAccordionCollapse>
+              <div ngbAccordionBody>
+                <ng-template>
+                  <div class="row g-2" [formGroupName]="item.key">
+                    @for (
+                      controll of [item.value.controlls];
+                      track $index;
+                      let j = $index
+                    ) {
+                      @for (
+                        itemControll of controll | keyvalue;
+                        track $index;
+                        let z = $index
+                      ) {
+                        <div
+                        [ngClass]="{'d-none': itemControll.value.hidden}"
+                         class="col-md-6 col-md-6 col-sm-12 p-1">
+                          <div class="form-floating">
+                            @switch (itemControll.value.type) {
+                              @case (t.number) {
+                                <input
+                                  [ngClass]="{
+                                    'is-invalid':
+                                      !itemControll.value.control.valid &&
+                                      itemControll.value.control.touched,
+                                  }"
+                                  [placeholder]="itemControll.value.label"
+                                  [attr.min]="itemControll.value.min || null"
+                                  [attr.max]="itemControll.value.max || null"
+                                  [attr.pattern]="
+                                    itemControll.value.pattern || null
+                                  "
+                                  [attr.maxLength]="
+                                    itemControll.value.maxLength || null
+                                  "
+                                  [type]="itemControll.value.type"
+                                  class="form-control"
+                                />
+                              }
+
+                              @case (t.comboIntegerInteger) {
+                                <select
+                                  class="form-select"
+                                  [ngClass]="{
+                                    'is-invalid':
+                                      !itemControll.value.control.valid &&
+                                      itemControll.value.control.touched,
+                                  }"
+                                  id="floatingSelect"
+                                  aria-label="Floating label select example"
+                                  [formControlName]="itemControll.key"
+                                >
+                                  @for (
+                                    aditionalKeyValue of itemControll.value
+                                      .additionalData;
+                                    track $index
+                                  ) {
+                                    @if (aditionalKeyValue.key === null) {
+                                      <option [value]="null" class="bg-danger text-center text-white fw-bolder">
+                                        {{ aditionalKeyValue.value }}
+                                      </option>
+                                    }
+                                    @else{
+                                      <option [value]="aditionalKeyValue.key">
+                                        {{ aditionalKeyValue.value }}
+
+                                      </option>
+                                    }
+                                  }
+                                </select>
+                              }
+
+                              @case (t.textPhone) {
+                                <input
+                                  [ngClass]="{
+                                    'is-invalid':
+                                      !itemControll.value.control.valid &&
+                                      itemControll.value.control.touched,
+                                  }"
+                                  [placeholder]="itemControll.value.label"
+                                  [attr.min]="itemControll.value.min || null"
+                                  [attr.max]="itemControll.value.max || null"
+                                  [attr.pattern]="
+                                    itemControll.value.pattern || null
+                                  "
+                                  [attr.maxLength]="
+                                    itemControll.value.maxLength || null
+                                  "
+                                  [type]="itemControll.value.type"
+                                  [formControlName]="itemControll.key"
+                                  class="form-control"
+                                />
+                              }
+
+                              @case (t.textArea) {
+                                <textarea
+                                  class="form-control"
+                                  style="height: 80px"
+                                ></textarea>
+                              }
+
+                              @case (t.checkBox) {
+                                <input
+                                  [type]="itemControll.value.type"
+                                  [formControlName]="itemControll.key"
+                                  class="form-control"
+                                />
+                              }
+
+                              @case (t.radioButton) {
+                                <input
+                                  [type]="itemControll.value.type"
+                                  [formControlName]="itemControll.key"
+                                  class="form-control"
+                                />
+                              }
+
+                              @case(t.hidden) {
+                                <input
+                                  [ngClass]="{
+                                    'is-invalid':
+                                      !itemControll.value.control.valid &&
+                                      itemControll.value.control.touched,
+                                  }"
+                                  [attr.min]="itemControll.value.min || null"
+                                  [attr.max]="itemControll.value.max || null"
+                                  [attr.pattern]="
+                                    itemControll.value.pattern || null
+                                  "
+                                  [attr.maxLength]="
+                                    itemControll.value.maxLength || null
+                                  "
+                                  [placeholder]="itemControll.value.label"
+                                  [formControlName]="itemControll.key"
+                                  [type]="itemControll.value.type"
+                                  class="form-control"
+                                />
+                              }
+
+                              @default {
+                                <input
+                                  [ngClass]="{
+                                    'is-invalid':
+                                      !itemControll.value.control.valid &&
+                                      itemControll.value.control.touched,
+                                  }"
+                                  [attr.min]="itemControll.value.min || null"
+                                  [attr.max]="itemControll.value.max || null"
+                                  [attr.pattern]="
+                                    itemControll.value.pattern || null
+                                  "
+                                  [attr.maxLength]="
+                                    itemControll.value.maxLength || null
+                                  "
+                                  [placeholder]="itemControll.value.label"
+                                  [formControlName]="itemControll.key"
+                                  [type]="itemControll.value.type"
+                                  class="form-control"
+                                />
+                              }
+                            }
+
+                            <label>{{ itemControll.value.label }}</label>
+                          </div>
+                        </div>
+                      }
+                    }
+                  </div>
+                </ng-template>
+              </div>
+            </div>
+          </div>
+        }
+
+        <div class="row m-0 mt-3 g-2 gap-4">
+          <div class="col p-0">
+            <button
+              (click)="location.back()"
+              class="d-flex justify-content-center btn btn-warning w-100 p-2"
+              type="button"
+            >
+              <ion-icon name="close-circle" size="large"></ion-icon>
+            </button>
+          </div>
+          <div class="col p-0">
+            <button
+              [disabled]="!generalFormGroup.valid"
+              (click)="submitForm()"
+              class="d-flex justify-content-center btn btn-primary w-100 p-2"
+              type="button"
+            >
+              <ion-icon name="checkmark-circle" size="large"></ion-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
