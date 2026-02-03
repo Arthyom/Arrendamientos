@@ -18,6 +18,7 @@ import { MultiRecipientComponent } from '../../componentes/multi-recipient/multi
 import { IMonthResponse } from '../../interfaces/IMonthResponse';
 import { ArrendatarioIconToolComponent } from "../../componentes/arrendatario-icon-tool/arrendatario-icon-tool.component";
 import { InfiniteLoaderService } from '../../../../../shared/services/infinite-loader-service';
+import { EnumTypeProperty } from '../../../../models/Enums/EnumTypeProperty';
 
 
 @Component({
@@ -54,6 +55,8 @@ export class IndexComponent implements OnInit {
   public showMultiReport = signal(false);
   public signalArrendatarioId = signal(0);
   public signalPropiedadId = signal(0);
+
+  t = EnumTypeProperty;
 
 
   resourceName = input.required<string>();

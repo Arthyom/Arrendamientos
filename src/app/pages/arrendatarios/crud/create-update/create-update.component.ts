@@ -38,6 +38,8 @@ import { InfiniteLoaderService } from '../../../../../shared/services/infinite-l
 import { ActivatedRoute } from '@angular/router';
 import { Arrendatario } from '../../../../models/Entities/arrendatario';
 import { MapperFormValues } from '../../../../models/Mappers/MapperFormValues';
+import { EnumTypeProperty } from '../../../../models/Enums/EnumTypeProperty';
+import { map } from 'jquery';
 
 @Component({
   selector: 'app-create-update',
@@ -53,12 +55,14 @@ import { MapperFormValues } from '../../../../models/Mappers/MapperFormValues';
 })
 export class CreateUpdateComponent implements OnInit {
   t = EnumCommonFormControllType;
+  tp = EnumTypeProperty;
 
   private _service = inject(ServiceArrDataRequester);
   private _inf = inject(InfiniteLoaderService);
   private _router = inject(ActivatedRoute);
   private _location = inject(Location);
 
+  private _propiedad: Propiedad | null = null;
   url = signal<string>('arrendatarios');
 
   s = signal<ICommonCustomForm>({
@@ -67,6 +71,11 @@ export class CreateUpdateComponent implements OnInit {
         order: 1,
         label: 'Info. Basica',
         controlls: {
+          alias: {
+            label: 'Alias',
+            control: new FormControl(null, Validators.required),
+            additionalData: [{ key: 'placeholder', value: 'Como lo conoces?' }],
+          },
           id:{
             order: 0,
             label: 'ID',
@@ -132,18 +141,23 @@ export class CreateUpdateComponent implements OnInit {
 
       infoAdicional: {
         order: 2,
-        label: 'Info. Adicional',
+        label: 'Info. Propiedad',
         controlls: {
-          alias: {
-            label: 'Alias',
-            control: new FormControl(null, Validators.required),
-            additionalData: [{ key: 'placeholder', value: 'Como lo conoces?' }],
-          },
           propiedadId: {
             type: this.t.comboIntegerInteger,
             label: 'Propiedad',
             control: new FormControl( null, Validators.required),
           },
+          interior:{
+            label: 'Interior',
+            control: new FormControl(),
+          },
+          typeProperty:{
+            type: this.t.comboIntegerInteger,
+            label: 'Tipo Propiedad',
+            additionalData: this.convertTo(this.tp),
+            control: new FormControl(null, Validators.required),
+          }
         },
       },
 
@@ -168,6 +182,14 @@ export class CreateUpdateComponent implements OnInit {
     },
   });
 
+  convertTo (type: any){
+    return Object.entries(type).map(
+      ([key, value]) => {
+        return !Number.isNaN(Number(key)) ? { key: key, value: value } : null;
+      }
+    ).filter(x => x != null) as IKeyValue[];
+  }
+
   async ngOnInit() {
     this._inf.showLoader.set(true);
 
@@ -183,6 +205,10 @@ export class CreateUpdateComponent implements OnInit {
       await this._service.getById<Arrendatario>('arrendatarios', id),
     );
 
+    const propAct = r.find(x => x.id === ar.propiedadId);
+    this._propiedad = propAct ? {...propAct} : null;
+    ar.propiedad = propAct;
+
     const propiedades = r.map<IKeyValue>((x) => ({
       key: x.id.toString(),
       value: x.direccion,
@@ -191,45 +217,80 @@ export class CreateUpdateComponent implements OnInit {
     this.s.update((currentS) => {
       currentS.groups['infoAdicional'].controlls['propiedadId'].additionalData =
        [ {key:null, value:'No Asignado'} ,...propiedades ];
+
       currentS.groups['infoBase'].controlls['nombre'].control.setValue(
         ar.nombre,
       );
+
       currentS.groups['infoBase'].controlls['apellidoPaterno'].control.setValue(
         ar.apellidoPaterno,
       );
+
       currentS.groups['infoBase'].controlls['apellidoMaterno'].control.setValue(
         ar.apellidoMaterno,
       );
+
       currentS.groups['infoBase'].controlls['direccion'].control.setValue(
         ar.direccion,
       );
+
       currentS.groups['infoBase'].controlls['municipio'].control.setValue(
         ar.municipio,
       );
+
       currentS.groups['infoBase'].controlls['colonia'].control.setValue(
         ar.colonia,
       );
+
         currentS.groups['infoBase'].controlls['id'].control.setValue(
         ar.id,
       );
-      // currentS.groups['infoBase'].controlls['cp'].control.setValue(ar.);
-      // currentS.groups['infoBase'].controlls['telefono'].control.setValue(ar.te);
-      currentS.groups['infoAdicional'].controlls['alias'].control.setValue(
+
+       currentS.groups['infoBase'].controlls['telefono'].control.setValue(
+        ar.telefono,
+      );
+
+        currentS.groups['infoBase'].controlls['cp'].control.setValue(
+        ar.cp,
+      );
+      currentS.groups['infoBase'].controlls['alias'].control.setValue(
         ar.alias,
       );
+
       currentS.groups['infoAdicional'].controlls[
         'propiedadId'
       ].control.setValue(ar.propiedadId);
+
+      currentS.groups['infoAdicional'].controlls[
+        'typeProperty'
+      ].control.setValue(ar.propiedad?.typeProperty);
+
+      currentS.groups['infoAdicional'].controlls[
+        'interior'
+      ].control.setValue(ar.propiedad?.interior);
+
+      // currentS.groups['infoBase'].controlls['cp'].control.setValue(ar.);
+      // currentS.groups['infoBase'].controlls['telefono'].control.setValue(ar.te);
       // currentS.groups['infoOpcional'].controlls['email'].control.setValue(ar.e);
       return currentS;
     });
 
     this._inf.showLoader.set(false);
+
+
   }
 
   async submitForm(data: any) {
     try {
      const mapped = MapperFormValues.fromObject<Arrendatario>(data);
+     mapped.propiedad = this._propiedad;
+
+     mapped.propiedad.interior = data.infoAdicional.interior;
+     mapped.propiedad.typeProperty =  Number(data.infoAdicional.typeProperty);
+
+
+     debugger;
+
       this._inf.showLoader.set(true);
       const id = Number(this._router.snapshot.paramMap.get('id'));
       const s = await firstValueFrom(

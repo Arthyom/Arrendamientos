@@ -198,7 +198,7 @@
           <div class="col p-0">
             <button
               [disabled]="!generalFormGroup.valid"
-              (click)="submitForm()"
+              (click)="outputSchema.emit(generalFormGroup.value)"
               class="d-flex justify-content-center btn btn-primary w-100 p-2"
               type="button"
             >

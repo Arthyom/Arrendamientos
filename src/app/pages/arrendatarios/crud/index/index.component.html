@@ -88,8 +88,12 @@
           [title]="arrendatario.alias"
           [typeProperty]="arrendatario.propiedad?.typeProperty">
         </app-arrendatario-icon-tool>
-          <span class="text-muted" style="font-size: 12px;">{{arrendatario.propiedad?.direccion}}</span>
-          <span class="text-muted" style="font-size: 12px;">{{arrendatario.propiedad?.id}}</span>
+          <span class="text-muted" style="font-size: 14px;">{{arrendatario.propiedad?.direccion}}</span>
+
+          <span class="text-muted" style="font-size: 14px;">
+            {{arrendatario.propiedad?.interior}}
+          </span>
+
         </div>
         <div class="smBody">
           <div
@@ -104,8 +108,8 @@
                 "
                 type="button"
                 class="btn btn-outline-success border-black"
-                ngbTooltip="Recibo Mes Escpecifico"
-                placement="start"
+                ngbTooltip="Recibo Mes Actual"
+                placement="top"
               >
                 <ion-icon
                   style="color: black"
@@ -119,7 +123,7 @@
                 type="button"
                 class="btn btn-outline-success border-black"
                 ngbTooltip="Recibo Mes Escpecifico"
-                placement="start"
+                placement="top"
               >
                 <ion-icon
                   style="color: black"

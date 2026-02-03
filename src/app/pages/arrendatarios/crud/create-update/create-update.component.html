@@ -1,6 +1,7 @@
 <div>
 
     <app-custom-form
+    (outputSchema)="submitForm($event)"
     [url]="url()"
     [inputSchema]="s()"></app-custom-form>
 

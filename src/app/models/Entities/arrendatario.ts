@@ -14,5 +14,6 @@ export class Arrendatario extends BaseEntity{
   colonia!: string;
   propiedad?: Propiedad;
   propiedadId! : number;
-
+  telefono!: string;
+  cp?: string;
 }
