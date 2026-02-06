@@ -1,3 +1,86 @@
-<p>arrendatarios works!</p>
+<div class="my-3">
+  <ul ngbNav #nav="ngbNav" class="nav-tabs">
+    <li [ngbNavItem]="1">
+      <button ngbNavLink>Filtros</button>
+      <ng-template ngbNavContent>
+        <div class="d-flex flex-row gap-3 py-3">
+          <select
+            class="form-select form-select"
+            aria-label=".form-select-lg example"
+          >
+            <option selected>Open this select menu</option>
+            <option value="1">One</option>
+            <option value="2">Two</option>
+            <option value="3">Three</option>
+          </select>
+
+          <select
+            class="form-select form-select"
+            aria-label=".form-select-lg example"
+          >
+            <option selected>Open this select menu</option>
+            <option value="1">One</option>
+            <option value="2">Two</option>
+            <option value="3">Three</option>
+          </select>
+        </div>
+      </ng-template>
+    </li>
+    <li [ngbNavItem]="2">
+      <button ngbNavLink>Adeudos</button>
+      <ng-template ngbNavContent>
+        <div class="d-flex flex-row gap-3 py-3">
+          <select
+            class="form-select form-select"
+            aria-label=".form-select-lg example"
+          >
+            <option selected>Open this select menu</option>
+            <option value="1">One</option>
+            <option value="2">Two</option>
+            <option value="3">Three</option>
+          </select>
+
+          <select
+            class="form-select form-select"
+            aria-label=".form-select-lg example"
+          >
+            <option selected>Open this select menu</option>
+            <option value="1">One</option>
+            <option value="2">Two</option>
+            <option value="3">Three</option>
+          </select>
+        </div>
+      </ng-template>
+    </li>
+    <li [ngbNavItem]="3">
+      <button ngbNavLink>Propiedad</button>
+      <ng-template ngbNavContent>
+        <div class="d-flex flex-row gap-3 py-3">
+          <select
+            class="form-select form-select"
+            aria-label=".form-select-lg example"
+          >
+            <option selected>Open this select menu</option>
+            <option value="1">One</option>
+            <option value="2">Two</option>
+            <option value="3">Three</option>
+          </select>
+
+          <select
+            class="form-select form-select"
+            aria-label=".form-select-lg example"
+          >
+            <option selected>Open this select menu</option>
+            <option value="1">One</option>
+            <option value="2">Two</option>
+            <option value="3">Three</option>
+          </select>
+        </div>
+      </ng-template>
+    </li>
+  </ul>
+</div>
+
+<div [ngbNavOutlet]="nav" class="mt-2"></div>
 
 <router-outlet></router-outlet>

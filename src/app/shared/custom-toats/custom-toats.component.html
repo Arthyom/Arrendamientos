@@ -1,0 +1,11 @@
+  <div class="position-fixed mt-5 z-3 p-3 pt-5 w-100">
+    <ngb-toast
+      [header]="header()"
+      [autohide]="autoHide()"
+      [delay]="delay()"
+      [class]="class()"
+    >
+      {{ message() }}
+    </ngb-toast>
+  </div>
+

@@ -1,5 +1,5 @@
-import { Component, signal } from "@angular/core";
-import { RouterModule, Routes } from "@angular/router";
+import { Component, inject, OnInit, signal } from "@angular/core";
+import { ActivatedRoute, RouterModule, Routes } from "@angular/router";
 import { NgbAccordionBody, NgbAccordionButton, NgbAccordionCollapse, NgbAccordionDirective, NgbAccordionHeader, NgbAccordionItem, NgbAccordionToggle, NgbNavLink, NgbNavModule } from "@ng-bootstrap/ng-bootstrap";
 import { pagesRoutes } from "../../pages/pages.routes";
 
@@ -21,6 +21,14 @@ import { pagesRoutes } from "../../pages/pages.routes";
   templateUrl: "./navbar.component.html",
   styleUrl: "./navbar.component.scss",
 })
-export class NavbarComponent {
+export class NavbarComponent implements OnInit{
   parentRoutes = signal<Routes>(pagesRoutes);
+
+  activeRoute = inject(ActivatedRoute);
+
+  ngOnInit(): void {
+    console.log('xxxx', this.activeRoute.parent?.snapshot)
+  }
+
+
 }

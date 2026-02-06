@@ -40,6 +40,7 @@ import { Arrendatario } from '../../../../models/Entities/arrendatario';
 import { MapperFormValues } from '../../../../models/Mappers/MapperFormValues';
 import { EnumTypeProperty } from '../../../../models/Enums/EnumTypeProperty';
 import { map } from 'jquery';
+import { AppOpStateService } from '../../../../shared/services/app-op-state';
 
 @Component({
   selector: 'app-create-update',
@@ -61,6 +62,7 @@ export class CreateUpdateComponent implements OnInit {
   private _inf = inject(InfiniteLoaderService);
   private _router = inject(ActivatedRoute);
   private _location = inject(Location);
+  private _stateService = inject(AppOpStateService);
 
   private _propiedad: Propiedad | null = null;
   url = signal<string>('arrendatarios');
@@ -287,16 +289,18 @@ export class CreateUpdateComponent implements OnInit {
 
      mapped.propiedad.interior = data.infoAdicional.interior;
      mapped.propiedad.typeProperty =  Number(data.infoAdicional.typeProperty);
-
-
-     debugger;
-
       this._inf.showLoader.set(true);
       const id = Number(this._router.snapshot.paramMap.get('id'));
       const s = await firstValueFrom(
         await this._service.put<Arrendatario>(`arrendatarios/${id}`, mapped),
       );
+      setTimeout(() => {
+        this._stateService.setSuccessState(true);
+      }, 1000);
     } catch (error) {
+            setTimeout(() => {
+        this._stateService.setErrorState(true);
+      }, 1000);
     } finally {
 
       this._inf.showLoader.set(false);

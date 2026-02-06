@@ -1,5 +1,9 @@
+<!-- Big screen section -->
 <nav class="navbar navbar-dark bg-dark">
-  <div class="container-fluid">
+  <div class="col-sm-12 mx-3">
+    <h1>Arredatarios</h1>
+  </div>
+  <div class="col-sm-12 mx-3">
     <button
       class="navbar-toggler w-100"
       type="button"
@@ -13,6 +17,10 @@
     </button>
   </div>
 </nav>
+
+
+
+<!-- Small screen section -->
 <div class="collapse" id="navbarToggleExternalContent">
   <div class="bg-dark p-1" style="font-size: 10px">
     @for (route of parentRoutes(); track route.path) { @if(route.children){

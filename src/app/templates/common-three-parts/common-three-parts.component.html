@@ -14,18 +14,39 @@
 
 </div> -->
 
+<app-infinite-loader
+  [showModal]="loaderService.showLoader()"
+></app-infinite-loader>
 
-<app-infinite-loader [showModal]="loaderService.showLoader()"></app-infinite-loader>
+@if (stateService.hasError) {
+  <app-custom-toats
+  [autoHide]="true"
+  [delay]="5000"
+  [class]="'bg-danger text-white'"
+  [header]="'Operacion fallida'"
+  [message]="'Error, itente de nuevo mas tarde'">
+  </app-custom-toats>
+}
+
+@if (stateService.hasSuccess) {
+  <app-custom-toats
+  [autoHide]="true"
+  [delay]="5000"
+  [class]="'bg-success text-white'"
+  [header]="'Operacion correcta'"
+  [message]="'Correcto, Los cambios guardados'">
+  </app-custom-toats>
+}
+
 <div class=" ">
-  <div class="row ">
+  <div class="row">
     <div class="col-lg-1 col-md-2 col-sm-3 vh-sm-100 bg-dark">
-      <app-navbar/>
+      <app-navbar />
     </div>
 
-    <div class="col-lg-11 col-md-10 col-sm-9  bg-danger vh-100">
+    <div class="col-lg-11 col-md-10 col-sm-9 bg-danger vh-100">
       <div class="container">
-        <router-outlet/>
-
+        <router-outlet />
       </div>
     </div>
   </div>
