@@ -1,10 +1,11 @@
 <!-- Big screen section -->
 <nav class="navbar navbar-dark bg-dark">
   <div class="col-sm-12 mx-3">
-    <h1>Arredatarios</h1>
+    <h1>{{ titleService.activeTitle }}</h1>
   </div>
   <div class="col-sm-12 mx-3">
     <button
+      (click)="open(content)"
       class="navbar-toggler w-100"
       type="button"
       data-bs-toggle="collapse"
@@ -18,9 +19,8 @@
   </div>
 </nav>
 
-
-
 <!-- Small screen section -->
+<!--
 <div class="collapse" id="navbarToggleExternalContent">
   <div class="bg-dark p-1" style="font-size: 10px">
     @for (route of parentRoutes(); track route.path) { @if(route.children){
@@ -57,4 +57,66 @@
     </div>
     }}
   </div>
-</div>
+</div> -->
+
+<ng-template #content let-offcanvas>
+  <div class="offcanvas-header bg-primary">
+    <h4 class="offcanvas-title text-light">User NickName</h4>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="offcanvas.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="offcanvas-body p-0 m-2">
+    <!-- <p>One fine body&hellip;</p>
+		<div class="text-end">
+			<button type="button" class="btn btn-outline-secondary" (click)="offcanvas.close('Close click')">Close</button>
+		</div> -->
+
+    <div class="bg-dark card" id="navbarToggleExternalContent">
+      <div style="font-size: 10px">
+        @for (route of parentRoutes(); track route.path) {
+          @if (route.children) {
+            <button
+              data-bs-toggle="collapse"
+              class="btn btn-outline-primary w-100 my-1"
+              type="button"
+              [attr.data-bs-target]="'#btn' + route.title"
+              [attr.aria-controls]="'btn' + route.title"
+              aria-label="Toggle btn"
+            >
+              {{ route.title }}
+            </button>
+            <div class="collapse" [id]="'btn' + route.title">
+              <div class="card border-dark">
+                <div class="card-body bg-dark border-dark p-0 m-0">
+                  <ul class="p-0 m-0 px-2" aria-labelledby="btnGroupDrop1">
+                    @for (child of route.children; track child.title) {
+                      @if (
+                        child.path !== "**" && !child.path?.includes("edit")
+                      ) {
+                        <a
+                          routerLinkActive="text-success"
+                          class="btn btn-outline-primary w-100 my-1"
+                          [routerLink]="[route.path, child.path]"
+                          >{{ child.title }}</a
+                        >
+                      }
+                    }
+                  </ul>
+                </div>
+              </div>
+            </div>
+          }
+        }
+        <a
+          routerLinkActive="text-success"
+          class="btn btn-danger w-100 mt-5 "
+          >Salir</a
+        >
+      </div>
+    </div>
+  </div>
+</ng-template>

@@ -1,1 +1,89 @@
-<h1>index works</h1>
+<app-custom-table [configs]="tableConfigs">
+  <!-- Large screens' section -->
+  <tbody class="table-items">
+    @for (
+      propiedad of tableConfigs.tableData;
+      track propiedad;
+      let i = $index
+    ) {
+      <tr>
+        <th scope="row">{{ i + 1 }}</th>
+        <td>
+          <!-- <img
+                [src]="'https://upload.wikimedia.org/wikipedia/commons/' + arrendatario.flag"
+                [alt]="'The flag of ' + arrendatario.name"
+                class="me-2"
+                style="width: 20px"
+              /> -->
+          {{ propiedad.alias }}
+        </td>
+        <!-- <td>
+          {{arrendatario.nombre}}{{ arrendatario.apellidoPaterno }} {{ arrendatario.apellidoMaterno }}
+        </td> -->
+        <td>
+          {{ propiedad.nombre }}
+        </td>
+        <td>
+          <div
+            class="btn-group"
+            role="group"
+            aria-label="Basic mixed styles example"
+          >
+            <app-button-actions [itemId]="propiedad.id"> </app-button-actions>
+          </div>
+        </td>
+      </tr>
+    }
+  </tbody>
+
+  <!-- Small Screens' section -->
+  <div class="card-items p-0">
+    @for (
+      propiedad of tableConfigs.tableData;
+      track propiedad;
+      let i = $index
+    ) {
+      <app-card-collapsable>
+        <div class="smTitle d-flex flex-column gap-1 pt-0">
+          <!-- <app-arrendatario-icon-tool
+          [title]="propiedad.direccion"
+          [typeProperty]="propiedad?.typeProperty">
+        </app-arrendatario-icon-tool> -->
+
+          <app-propiedad-icon-tool
+            [title]="propiedad.direccion"
+            [typeProperty]="propiedad?.typeProperty"
+            ]
+          ></app-propiedad-icon-tool>
+
+          <!-- <span class="text-muted" style="font-size: 14px;">{{propiedad?.direccion}}</span> -->
+
+          <span class="text-muted" style="font-size: 20px">
+            {{ propiedad?.interior }}
+          </span>
+        </div>
+        <div class="smBody">
+          <div
+            class="btn-group"
+            role="group"
+            aria-label="Basic mixed styles example"
+          >
+            <app-button-actions [itemId]="propiedad.id">
+              <button
+                type="button"
+                class="btn btn-outline-success border-black"
+                ngbTooltip="Recibo Mes Actual"
+                placement="top"
+              >
+                <ion-icon
+                  style="color: black"
+                  name="build-outline"
+                ></ion-icon>
+              </button>
+            </app-button-actions>
+          </div>
+        </div>
+      </app-card-collapsable>
+    }
+  </div>
+</app-custom-table>

@@ -57,7 +57,7 @@ import { firstValueFrom } from 'rxjs/internal/firstValueFrom';
 })
 export class CustomFormComponent implements OnInit {
   t = EnumCommonFormControllType;
-  inputSchema = input.required<ICommonCustomForm>();
+  inputSchema = input<ICommonCustomForm>();
   url = input.required<string>();
   outputSchema = output<any>();
   private _fb = inject(FormBuilder);
@@ -73,25 +73,27 @@ export class CustomFormComponent implements OnInit {
   }
 
   ngOnInit() {
-    const sortedObject = Object.fromEntries(
-      Object.entries(this.inputSchema().groups).sort(([keyA,vA], [keyB,vB]) =>
+    if (this.inputSchema() != undefined) {
+      console.log('cosas en el init', this.inputSchema());
+      const sortedObject = Object.fromEntries(
+        Object.entries(this.inputSchema()!.groups).sort(
+          ([keyA, vA], [keyB, vB]) =>
+            // (vA?.order || 0) > (vB?.order ||0)
+            (vA?.order || 0) > (vB?.order || 0) ? -1 : 1,
+        ),
+      );
 
-        // (vA?.order || 0) > (vB?.order ||0)
-        (vA?.order || 0) > (vB?.order ||0) ? -1 : 1
+      for (const groupItemKey in sortedObject) {
+        const controll = this.inputSchema()!.groups[groupItemKey].controlls;
+        const controllObject: any = {};
+        for (const controlKey in controll)
+          controllObject[controlKey] = controll[controlKey].control;
 
-      ),
-    );
+        this._formTemplate[groupItemKey] = this._fb.group(controllObject);
+      }
 
-    for (const groupItemKey in sortedObject) {
-      const controll = this.inputSchema().groups[groupItemKey].controlls;
-      const controllObject: any = {};
-      for (const controlKey in controll)
-        controllObject[controlKey] = controll[controlKey].control;
-
-      this._formTemplate[groupItemKey] = this._fb.group(controllObject);
+      this.generalFormGroup = this._fb.group(this._formTemplate);
     }
-
-    this.generalFormGroup = this._fb.group(this._formTemplate);
   }
 
   currentFormControlIsValid(section: string, field: any) {
