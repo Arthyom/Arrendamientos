@@ -2,6 +2,7 @@ import { Component, computed, input, OnInit } from '@angular/core';
 import { IonIcon } from "@ionic/angular/standalone";
 import { EnumTypeProperty } from '../../../../models/Enums/EnumTypeProperty';
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
+import { Propiedad } from '../../../../models/Entities/propiedad';
 
 @Component({
   selector: 'app-arrendatario-icon-tool',
@@ -15,10 +16,11 @@ import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 })
 export class ArrendatarioIconToolComponent  implements OnInit {
 
-  title = input.required()
+  title = input.required();
+
   typeProperty = input<EnumTypeProperty>()
   typeProperties = EnumTypeProperty;
-
+  properties = input<Propiedad[]>()
 
 
   constructor() { }

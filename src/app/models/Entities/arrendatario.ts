@@ -1,4 +1,5 @@
 import { BaseEntity } from "../base/base-entity";
+import { Interior } from "./interior";
 import { Propiedad } from "./propiedad";
 
 export class Arrendatario extends BaseEntity{
@@ -12,8 +13,10 @@ export class Arrendatario extends BaseEntity{
   direccion!: string;
   municipio!: string;
   colonia!: string;
-  propiedad?: Propiedad;
+  propiedad?: Propiedad [];
   propiedadId! : number;
   telefono!: string;
   cp?: string;
+  interiores?: Interior [];
+
 }

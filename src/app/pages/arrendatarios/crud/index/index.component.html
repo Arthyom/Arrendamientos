@@ -1,6 +1,5 @@
-
 <app-modal-container [showModal]="showMultiReport()">
-  <h3 class="fw-bold  w-100 text-center" header>Seleccione año y meses</h3>
+  <h3 class="fw-bold w-100 text-center" header>Seleccione año y meses</h3>
   <div body>
     <app-multi-recipient
       (controlClose)="hideModal($event)"
@@ -8,11 +7,6 @@
     ></app-multi-recipient>
   </div>
 </app-modal-container>
-
-
-
-
-
 
 <app-custom-table [configs]="tableConfigs">
   <!-- Large screens' section -->
@@ -36,9 +30,9 @@
         <!-- <td>
           {{arrendatario.nombre}}{{ arrendatario.apellidoPaterno }} {{ arrendatario.apellidoMaterno }}
         </td> -->
-        <td>
+        <!-- <td>
           {{ arrendatario.propiedad?.alias }}
-        </td>
+        </td> -->
         <td>
           <div
             class="btn-group"
@@ -88,55 +82,133 @@
       let i = $index
     ) {
       <app-card-collapsable>
-        <div class="smTitle d-flex flex-column gap-1 pt-0">
+        <div class="smTitle d-flex flex-column gap-1 pt-3">
           <app-arrendatario-icon-tool
-          [title]="arrendatario.alias"
-          [typeProperty]="arrendatario.propiedad?.typeProperty">
-        </app-arrendatario-icon-tool>
-          <span class="text-muted" style="font-size: 14px;">{{arrendatario.propiedad?.direccion}}</span>
-
-          <span class="text-muted" style="font-size: 14px;">
-            {{arrendatario.propiedad?.interior}}
-          </span>
-
-        </div>
-        <div class="smBody">
-          <div
-            class="btn-group"
-            role="group"
-            aria-label="Basic mixed styles example"
+            [title]="arrendatario.alias"
+            [properties]="arrendatario.propiedad"
           >
-            <app-button-actions [itemId]="arrendatario.id">
-              <button
-                (click)="
-                  createReport(arrendatario.id, arrendatario.propiedadId)
-                "
-                type="button"
-                class="btn btn-outline-success border-black"
-                ngbTooltip="Recibo Mes Actual"
-                placement="top"
-              >
-                <ion-icon
-                  style="color: black"
-                  name="receipt-outline"
-                ></ion-icon>
-              </button>
-              <button
-                (click)="
-                  openMultiReport(arrendatario.id, arrendatario.propiedadId)
-                "
-                type="button"
-                class="btn btn-outline-success border-black"
-                ngbTooltip="Recibo Mes Escpecifico"
-                placement="top"
-              >
-                <ion-icon
-                  style="color: black"
-                  name="file-tray-full-outline"
-                ></ion-icon>
-              </button>
-            </app-button-actions>
-          </div>
+          </app-arrendatario-icon-tool>
+
+          @if (arrendatario.propiedad && arrendatario.interiores) {
+            @if (
+              arrendatario.propiedad.length > 0 &&
+              arrendatario.propiedad.length < 2
+            ) {
+              <span class="text-muted" style="font-size: 14px">
+                {{ arrendatario.propiedad[0].direccion }}
+              </span>
+              <span class="text-muted" style="font-size: 14px">
+                {{ arrendatario.interiores[0].alias }}
+              </span>
+            }
+            @else {
+              @if (arrendatario.propiedad.length >=2) {
+                @for (p of arrendatario.propiedad; track $index) {
+                  <span class="text-muted" style="font-size: 14px">
+                  {{ p.direccion }}
+                  </span>
+                }
+              }
+            }
+          }
+        </div>
+        <div class="smBody w-100" >
+            @if (arrendatario.propiedad && arrendatario.interiores) {
+              @if (arrendatario.propiedad.length === 1) {
+                <div
+                  class="btn-group w-100  d-flex flex-row justify-content-center"
+                  role="group"
+                  aria-label="Basic mixed styles example"
+                >
+                  <app-button-actions [itemId]="arrendatario.id">
+                    <button
+                      (click)="
+                        createReport(arrendatario.id, arrendatario.propiedad[0].id)
+                      "
+                      type="button"
+                      class="btn btn-outline-success border-black"
+                      ngbTooltip="Recibo Mes Actual"
+                      placement="top"
+                    >
+                      <ion-icon
+                        style="color: black"
+                        name="receipt-outline"
+                      ></ion-icon>
+                    </button>
+                    <button
+                      (click)="
+                        openMultiReport(
+                          arrendatario.id,
+                          arrendatario.propiedadId
+                        )
+                      "
+                      type="button"
+                      class="btn btn-outline-success border-black"
+                      ngbTooltip="Recibo Mes Escpecifico"
+                      placement="top"
+                    >
+                      <ion-icon
+                        style="color: black"
+                        name="file-tray-full-outline"
+                      ></ion-icon>
+                    </button>
+                  </app-button-actions>
+                </div>
+              } @else {
+                @for (prop of arrendatario.propiedad; track $index) {
+                  <app-card-collapsable>
+                    <div class="smTitle pt-2">
+                      {{ prop.alias }}
+                    </div>
+
+                    <div class="smBody">
+                      <div
+                        class="btn-group"
+                        role="group"
+                        aria-label="Basic mixed styles example"
+                      >
+                        <app-button-actions [itemId]="arrendatario.id">
+                          <button
+                            (click)="
+                              createReport(
+                                arrendatario.id,
+                                prop.id
+                              )
+                            "
+                            type="button"
+                            class="btn btn-outline-success border-black"
+                            ngbTooltip="Recibo Mes Actual"
+                            placement="top"
+                          >
+                            <ion-icon
+                              style="color: black"
+                              name="receipt-outline"
+                            ></ion-icon>
+                          </button>
+                          <button
+                            (click)="
+                              openMultiReport(
+                                arrendatario.id,
+                                arrendatario.propiedadId
+                              )
+                            "
+                            type="button"
+                            class="btn btn-outline-success border-black"
+                            ngbTooltip="Recibo Mes Escpecifico"
+                            placement="top"
+                          >
+                            <ion-icon
+                              style="color: black"
+                              name="file-tray-full-outline"
+                            ></ion-icon>
+                          </button>
+                        </app-button-actions>
+                      </div>
+                    </div>
+                  </app-card-collapsable>
+                }
+              }
+            }
         </div>
       </app-card-collapsable>
     }

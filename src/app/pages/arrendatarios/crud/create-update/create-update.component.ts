@@ -209,7 +209,7 @@ export class CreateUpdateComponent implements OnInit {
 
     const propAct = r.find(x => x.id === ar.propiedadId);
     this._propiedad = propAct ? {...propAct} : null;
-    ar.propiedad = propAct;
+    // ar.propiedad = propAct;
 
     const propiedades = r.map<IKeyValue>((x) => ({
       key: x.id.toString(),
@@ -263,13 +263,13 @@ export class CreateUpdateComponent implements OnInit {
         'propiedadId'
       ].control.setValue(ar.propiedadId);
 
-      currentS.groups['infoAdicional'].controlls[
-        'typeProperty'
-      ].control.setValue(ar.propiedad?.typeProperty);
+      // currentS.groups['infoAdicional'].controlls[
+      //   'typeProperty'
+      // ].control.setValue(ar.propiedad?.typeProperty);
 
-      currentS.groups['infoAdicional'].controlls[
-        'interior'
-      ].control.setValue(ar.propiedad?.interior);
+      // currentS.groups['infoAdicional'].controlls[
+      //   'interior'
+      // ].control.setValue(ar.propiedad?.interior);
 
       // currentS.groups['infoBase'].controlls['cp'].control.setValue(ar.);
       // currentS.groups['infoBase'].controlls['telefono'].control.setValue(ar.te);

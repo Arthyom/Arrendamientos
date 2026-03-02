@@ -151,12 +151,12 @@ export class IndexComponent implements OnInit {
       this.tableConfigs.tableData = data;
       data.forEach(async (x) => {
         if (x.propiedadId && x.propiedadId > 0) {
-          x.propiedad = await firstValueFrom(
-            await this._propiedadService.getById<Propiedad>(
-              'propiedades',
-              x.propiedadId
-            )
-          );
+          // x.propiedad = await firstValueFrom(
+          //   await this._propiedadService.getById<Propiedad>(
+          //     'propiedades',
+          //     x.propiedadId
+          //   )
+          // );
         }
       });
       this._inf.showLoader.update((x) => false);
