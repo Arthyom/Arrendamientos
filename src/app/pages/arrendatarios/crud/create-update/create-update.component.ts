@@ -207,8 +207,8 @@ export class CreateUpdateComponent implements OnInit {
       await this._service.getById<Arrendatario>('arrendatarios', id),
     );
 
-    const propAct = r.find(x => x.id === ar.propiedadId);
-    this._propiedad = propAct ? {...propAct} : null;
+    // const propAct = r.find(x => x.id === ar.propiedadId);
+    // this._propiedad = propAct ? {...propAct} : null;
     // ar.propiedad = propAct;
 
     const propiedades = r.map<IKeyValue>((x) => ({
@@ -259,9 +259,9 @@ export class CreateUpdateComponent implements OnInit {
         ar.alias,
       );
 
-      currentS.groups['infoAdicional'].controlls[
-        'propiedadId'
-      ].control.setValue(ar.propiedadId);
+      // currentS.groups['infoAdicional'].controlls[
+      //   'propiedadId'
+      // ].control.setValue(ar.interiores[]);
 
       // currentS.groups['infoAdicional'].controlls[
       //   'typeProperty'

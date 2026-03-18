@@ -48,10 +48,14 @@ export class ServiceFacedeForm<Tout> {
 
   async loadValuesWithId() {
     const id = Number(this._router.snapshot.paramMap.get('id'));
-
-    this.tv = await firstValueFrom(
-      await this._service.getById<Tout>(this.resource(), id),
-    );
+    if(id>0){
+      this.tv = await firstValueFrom(
+        await this._service.getById<Tout>(this.resource(), id),
+      );
+    }
+    else{
+      this.tv = {} as Tout;
+    }
   }
 
   setValues(values: ICommonCustomForm) {
@@ -64,10 +68,11 @@ export class ServiceFacedeForm<Tout> {
 
     try {
       const mapped = MapperFormValues.fromObject<Tout>(values);
+      const url = mapped.id ?  `${this.resource()}/${mapped.id}` : `${this.resource()}`;
 
       const s = await firstValueFrom(
         await this._service.put<Tout>(
-          `${this.resource()}/${mapped.id}`,
+          url,
           mapped,
         ),
       );
@@ -84,6 +89,38 @@ export class ServiceFacedeForm<Tout> {
     this._inf.showLoader.set(false);
 
     this._location.back();
+  }
+
+
+   async submitFormAndResponse(values: any) {
+    this._inf.showLoader.set(true);
+
+    try {
+      const mapped = MapperFormValues.fromObject<Tout>(values);
+      const url = mapped.id ?  `${this.resource()}/${mapped.id}` : `${this.resource()}`;
+
+      const response = await firstValueFrom(
+        await this._service.put<Tout>(
+          url,
+          mapped,
+        ),
+      );
+
+      setTimeout(() => {
+        this._stateService.setSuccessState(true);
+      }, 1000);
+
+      this._inf.showLoader.set(false);
+
+      return response;
+
+    } catch (error) {
+      setTimeout(() => {
+        this._stateService.setErrorState(true);
+      }, 1000);
+      this._inf.showLoader.set(false);
+      return null;
+    }
   }
 
   setStateForLoader(state: boolean) {

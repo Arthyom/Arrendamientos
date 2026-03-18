@@ -1,9 +1,10 @@
 import { BaseEntity } from "../base/base-entity";
 import { EnumTypeProperty } from "../Enums/EnumTypeProperty";
+import { Propiedad } from "./propiedad";
 
 export class Interior extends BaseEntity{
     alias!: string;
-    nombre!: string;
+    etiqueta!: string;
     precio!: number;
     typeProperty!: EnumTypeProperty;
     libre!: boolean;
@@ -12,4 +13,5 @@ export class Interior extends BaseEntity{
     municipio!: string;
     colonia!: string;
     propiedadId!:string;
+    propiedad?: Propiedad;
 }

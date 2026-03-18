@@ -42,7 +42,7 @@
             <app-button-actions [itemId]="arrendatario.id">
               <button
                 (click)="
-                  createReport(arrendatario.id, arrendatario.propiedadId)
+                  createReport(arrendatario.id, 0)
                 "
                 type="button"
                 class="btn btn-outline-info border-black"
@@ -56,7 +56,7 @@
 
               <button
                 (click)="
-                  openMultiReport(arrendatario.id, arrendatario.propiedadId)
+                  openMultiReport(arrendatario.id, 0)
                 "
                 type="button"
                 class="btn btn-outline-success border-black"
@@ -83,29 +83,29 @@
     ) {
       <app-card-collapsable>
         <div class="smTitle d-flex flex-column gap-1 pt-3">
-          <app-arrendatario-icon-tool
-            [title]="arrendatario.alias"
-            [properties]="arrendatario.propiedad"
-          >
-          </app-arrendatario-icon-tool>
 
-          @if (arrendatario.propiedad && arrendatario.interiores) {
+          @if (arrendatario.interiores && arrendatario.interiores) {
+            <app-arrendatario-icon-tool
+              [title]="arrendatario.alias"
+              [interiores]="arrendatario.interiores"
+            >
+            </app-arrendatario-icon-tool>
             @if (
-              arrendatario.propiedad.length > 0 &&
-              arrendatario.propiedad.length < 2
+              arrendatario.interiores.length > 0 &&
+              arrendatario.interiores.length < 2
             ) {
               <span class="text-muted" style="font-size: 14px">
-                {{ arrendatario.propiedad[0].direccion }}
+                {{ arrendatario.interiores[0]?.propiedad?.direccion }}
               </span>
               <span class="text-muted" style="font-size: 14px">
-                {{ arrendatario.interiores[0].alias }}
+                {{ arrendatario.interiores[0]?.etiqueta }}
               </span>
             }
             @else {
-              @if (arrendatario.propiedad.length >=2) {
-                @for (p of arrendatario.propiedad; track $index) {
+              @if (arrendatario.interiores.length >=2) {
+                @for (i of arrendatario.interiores; track $index) {
                   <span class="text-muted" style="font-size: 14px">
-                  {{ p.direccion }}
+                  {{ i.propiedad?.direccion }}
                   </span>
                 }
               }
@@ -113,8 +113,9 @@
           }
         </div>
         <div class="smBody w-100" >
-            @if (arrendatario.propiedad && arrendatario.interiores) {
-              @if (arrendatario.propiedad.length === 1) {
+          <!-- One property section -->
+            @if (arrendatario.interiores ) {
+              @if (arrendatario.interiores.length === 1) {
                 <div
                   class="btn-group w-100  d-flex flex-row justify-content-center"
                   role="group"
@@ -123,7 +124,7 @@
                   <app-button-actions [itemId]="arrendatario.id">
                     <button
                       (click)="
-                        createReport(arrendatario.id, arrendatario.propiedad[0].id)
+                        createReport(arrendatario.id, arrendatario.interiores[0].propiedad?.id ?? 0)
                       "
                       type="button"
                       class="btn btn-outline-success border-black"
@@ -139,7 +140,7 @@
                       (click)="
                         openMultiReport(
                           arrendatario.id,
-                          arrendatario.propiedadId
+                          arrendatario.interiores[0].propiedad?.id ?? 0
                         )
                       "
                       type="button"
@@ -155,10 +156,10 @@
                   </app-button-actions>
                 </div>
               } @else {
-                @for (prop of arrendatario.propiedad; track $index) {
+                @for (interior of arrendatario.interiores; track $index) {
                   <app-card-collapsable>
                     <div class="smTitle pt-2">
-                      {{ prop.alias }}
+                      {{ interior.alias }}
                     </div>
 
                     <div class="smBody">
@@ -172,7 +173,7 @@
                             (click)="
                               createReport(
                                 arrendatario.id,
-                                prop.id
+                                interior.propiedad?.id ?? 0
                               )
                             "
                             type="button"
@@ -189,7 +190,7 @@
                             (click)="
                               openMultiReport(
                                 arrendatario.id,
-                                arrendatario.propiedadId
+                                interior.propiedad?.id ?? 0
                               )
                             "
                             type="button"

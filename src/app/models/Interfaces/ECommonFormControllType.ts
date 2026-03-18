@@ -6,5 +6,12 @@ export enum EnumCommonFormControllType{
   comboIntegerInteger = 'comboIntInt',
   checkBox = 'checkbox',
   radioButton = 'radio',
-  hidden='hidden'
+  hidden='hidden',
+  date = 'date',
+}
+
+export enum EnumReciboType{
+  normal = 1,
+  deposito = 2,
+  liquidacion = 3
 }

@@ -149,16 +149,16 @@ export class IndexComponent implements OnInit {
       await this._arrendatariosService.getAll<Arrendatario>(this.resourceName())
     ).subscribe((data) => {
       this.tableConfigs.tableData = data;
-      data.forEach(async (x) => {
-        if (x.propiedadId && x.propiedadId > 0) {
-          // x.propiedad = await firstValueFrom(
-          //   await this._propiedadService.getById<Propiedad>(
-          //     'propiedades',
-          //     x.propiedadId
-          //   )
-          // );
-        }
-      });
+      // data.forEach(async (x) => {
+      //   if (x.propiedadId && x.propiedadId > 0) {
+      //     // x.propiedad = await firstValueFrom(
+      //     //   await this._propiedadService.getById<Propiedad>(
+      //     //     'propiedades',
+      //     //     x.propiedadId
+      //     //   )
+      //     // );
+      //   }
+      // });
       this._inf.showLoader.update((x) => false);
     });
   }

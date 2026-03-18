@@ -23,4 +23,17 @@ export class MapperFormValues {
     }
     return mapped as Tout;
   }
+
+  public static convertToKeyValueArray( input: any[],  valueName: string = 'value' ): IKeyValue[]{
+   const mapped : IKeyValue[] = [];
+
+    input.forEach( item => {
+      mapped.push({
+        key: item.id,
+        value: item[valueName]
+      } as IKeyValue);
+    });
+
+    return mapped;
+  }
 }

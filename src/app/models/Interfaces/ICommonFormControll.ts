@@ -12,7 +12,7 @@ export interface ICommonFormControll{
   minLength?: number;
   pattern?: string;
   order?: number;
-
+  customFunction?: any;
   hidden?: boolean;
   additionalData?: IKeyValue[];
 

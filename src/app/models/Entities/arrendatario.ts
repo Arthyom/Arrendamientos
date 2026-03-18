@@ -13,8 +13,8 @@ export class Arrendatario extends BaseEntity{
   direccion!: string;
   municipio!: string;
   colonia!: string;
-  propiedad?: Propiedad [];
-  propiedadId! : number;
+  // propiedad?: Propiedad [];
+  // propiedadId! : number;
   telefono!: string;
   cp?: string;
   interiores?: Interior [];

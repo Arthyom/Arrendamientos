@@ -63,6 +63,7 @@
                                 id="floatingSelect"
                                 aria-label="Floating label select example"
                                 [formControlName]="itemControll.key"
+                                (change)="itemControll.value.customFunction($event)"
                               >
                                 @for (
                                   aditionalKeyValue of itemControll.value

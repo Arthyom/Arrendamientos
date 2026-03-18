@@ -1,4 +1,5 @@
 import { BaseEntity } from "../base/base-entity";
+import { EnumReciboType } from "../Interfaces/ECommonFormControllType";
 import { ReImpresion } from "./reimpresion";
 
 export class Recibo extends BaseEntity {
@@ -12,6 +13,9 @@ export class Recibo extends BaseEntity {
   fechaPago!: string | null;
   identificador!: string;
   total?: number;
+  subTotal?: number;
+  tipoRecibo?: EnumReciboType;
   reImpresion?: ReImpresion[];
+  importe?: number;
 }
 
