@@ -85,13 +85,13 @@ export class CreateUpdateComponent {
 
 
 
-            subTotal: {
-              type: EnumCommonFormControllType.number,
-              label: 'Subtotal',
-              control: new FormControl(
-                this.formService.tv.subTotal,
-              ),
-            },
+            // subTotal: {
+            //   type: EnumCommonFormControllType.hidden,
+            //   label: 'Subtotal',
+            //   control: new FormControl(
+            //     this.formService.tv.subTotal,
+            //   ),
+            // },
 
              importe: {
               type: EnumCommonFormControllType.number,
