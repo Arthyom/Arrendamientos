@@ -76,7 +76,7 @@ export class CreateUpdateComponent {
             },
 
             total: {
-              label: 'Total',
+              label: 'Precio Unitario',
               control: new FormControl(
                 this.formService.tv.total,
                 Validators.required
@@ -113,7 +113,7 @@ export class CreateUpdateComponent {
               type: EnumCommonFormControllType.comboIntegerInteger,
               label: 'Arrendatario',
               control: new FormControl(
-                this.formService.tv.arrendatarioId
+                this.formService.tv.arrendatarioId || 0
               ),
               additionalData: MapperFormValues.convertToKeyValueArray( this.arrendatarios, 'alias')
             },
@@ -122,7 +122,7 @@ export class CreateUpdateComponent {
               type: EnumCommonFormControllType.comboIntegerInteger,
               label: 'Propiedad',
               control: new FormControl(
-                this.formService.tv.propiedadId
+                this.formService.tv.propiedadId || 0
               ),
               additionalData: MapperFormValues.convertToKeyValueArray( this.propiedades, 'direccion')
             },
@@ -157,6 +157,8 @@ export class CreateUpdateComponent {
     delete event['infoBase'].pagado;
     event['infoBase'].tipoRecibo = Number(event['infoBase'].tipoRecibo);
     event['infoBase'].identificador = 'test';
+    event['infoBase'].arrendadorId = 1;
+
 
     const response = await this.formService.submitFormAndResponse( event);
     if(response){
