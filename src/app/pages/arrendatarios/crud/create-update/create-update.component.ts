@@ -263,7 +263,6 @@ export class CreateUpdateComponent extends BaseComponent<Arrendatario> {
   }
 
   setInterior(control: any) {
-    debugger;
     const selectedControl = control.target as HTMLSelectElement;
     const interiorId = selectedControl.selectedIndex;
     this.selectedInterior.set(

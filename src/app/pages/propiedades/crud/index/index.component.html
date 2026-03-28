@@ -21,7 +21,7 @@
           {{arrendatario.nombre}}{{ arrendatario.apellidoPaterno }} {{ arrendatario.apellidoMaterno }}
         </td> -->
         <td>
-          {{ propiedad.nombre }}
+          {{ propiedad.alias }}
         </td>
         <td>
           <div
@@ -52,8 +52,6 @@
 
           <app-propiedad-icon-tool
             [title]="propiedad.direccion"
-            [typeProperty]="propiedad?.typeProperty"
-            ]
           ></app-propiedad-icon-tool>
 
           <!-- <span class="text-muted" style="font-size: 14px;">{{propiedad?.direccion}}</span> -->

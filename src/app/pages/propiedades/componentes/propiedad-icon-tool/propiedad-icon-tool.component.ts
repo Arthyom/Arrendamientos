@@ -12,14 +12,14 @@ import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 })
 export class PropiedadIconToolComponent implements OnInit {
   title = input.required();
-  typeProperty = input<EnumTypeProperty>();
-  typeProperties = EnumTypeProperty;
+  // typeProperty = input<EnumTypeProperty>();
+  // typeProperties = EnumTypeProperty;
 
   constructor() {}
 
   ngOnInit() {}
 
-  getTypeProerties(ty: EnumTypeProperty): string {
-    return EnumTypeProperty[ty].toString();
-  }
+  // getTypeProerties(ty: EnumTypeProperty): string {
+  //   return EnumTypeProperty[ty].toString();
+  // }
 }
