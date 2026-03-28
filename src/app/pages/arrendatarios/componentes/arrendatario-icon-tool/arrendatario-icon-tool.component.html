@@ -7,51 +7,55 @@
     ></ion-icon>
     <!-- <ion-icon name="close-circle" class="text-danger"></ion-icon> -->
   </div>
-  <div class="d-flex align-items-center" [ngbTooltip]="getTypeProerties( typeProperty() ||typeProperties.SinUso)" >
+  @if (interiores().length >0) {
+    @if (interiores().length == 1) {
+        <div class="d-flex align-items-center" [ngbTooltip]="getTypeProerties( interiores()[0].typeProperty ||typeProperties.SinUso)" >
 
-        @if (interiores().length == 1) {
-          @switch (interiores()[0].propiedad?.typeProperty) {
-            @case (typeProperties.Casa) {
-              <ion-icon name="home" class=" fs-1"></ion-icon>
+            @switch (interiores()[0].typeProperty) {
+              @case (typeProperties.Casa) {
+                <ion-icon name="home" class=" fs-1"></ion-icon>
+              }
+
+              @case (typeProperties.Departamento) {
+                <ion-icon name="business" class=" fs-1"></ion-icon>
+              }
+
+              @case (typeProperties.Bodega) {
+                <ion-icon name="layers" class=" fs-1"></ion-icon>
+              }
+
+
+               @case (typeProperties.Local) {
+                <ion-icon name="storefront" class=" fs-1"></ion-icon>
+              }
+
+
+              @case (typeProperties.EspacioPension) {
+                <ion-icon name="car" class=" fs-1"></ion-icon>
+              }
+
+              @default {
+                <ion-icon name="trash" class=" fs-1"></ion-icon>
+              }
             }
-
-            @case (typeProperties.Departamento) {
-              <ion-icon name="business" class=" fs-1"></ion-icon>
+          </div>
+          }
+          @else {
+            @if( (interiores() || []).length >= 2 ){
+              <div class="d-flex align-items-center" [ngbTooltip]="getTypeProerties( typeProperties.Multiple )" >
+              <ion-icon name="podium" class=" fs-1"></ion-icon>
+              </div>
             }
-
-            @case (typeProperties.Bodega) {
-              <ion-icon name="layers" class=" fs-1"></ion-icon>
-            }
-
-
-             @case (typeProperties.Local) {
-              <ion-icon name="storefront" class=" fs-1"></ion-icon>
-            }
-
-
-            @case (typeProperties.EspacioPension) {
-              <ion-icon name="car" class=" fs-1"></ion-icon>
-            }
-
-            @default {
+            @else {
               <ion-icon name="trash" class=" fs-1"></ion-icon>
             }
           }
-        }
-        @else {
-          @if( (interiores() || []).length >= 2 ){
-            <ion-icon name="podium" class=" fs-1"></ion-icon>
-          }
-          @else {
-            <ion-icon name="trash" class=" fs-1"></ion-icon>
-          }
-        }
 
 
 
 
 
-  </div>
+  }
 
   <div style="font-size: 19px;" class="text-black d-flex  align-items-end w-100 px-2">
     <span>{{ title() }}</span>

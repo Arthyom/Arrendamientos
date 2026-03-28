@@ -6,4 +6,6 @@ export enum EnumTypeProperty {
   SinUso = 6,
   EspacioPension = 8,
   EnConstruccion = 7,
+  Multiple = 9,
+  Slot = 10
 }

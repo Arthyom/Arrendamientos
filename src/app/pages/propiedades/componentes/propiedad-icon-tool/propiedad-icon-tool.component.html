@@ -1,36 +1,10 @@
-<div class="d-flex flex-row  fw-bolder gap-1">
+<div class="d-flex flex-row    fw-bolder gap-1">
 
   <div class="d-flex align-items-center" [ngbTooltip]="getTypeProerties( typeProperty() ||typeProperties.SinUso)" >
-    @switch (typeProperty()) {
-      @case (typeProperties.Casa) {
-        <ion-icon name="home" class=" fs-1 text-primary"></ion-icon>
-      }
-
-      @case (typeProperties.Departamento) {
-        <ion-icon name="business" class=" fs-1 text-success"></ion-icon>
-      }
-
-      @case (typeProperties.Bodega) {
-        <ion-icon name="layers" class=" fs-1 text-secondary"></ion-icon>
-      }
-
-
-       @case (typeProperties.Local) {
-        <ion-icon name="storefront" class=" fs-1 text-warning"></ion-icon>
-      }
-
-
-      @case (typeProperties.EspacioPension) {
-        <ion-icon name="car" class=" fs-1 text-gradient"></ion-icon>
-      }
-
-      @default {
-        <ion-icon name="trash" class=" fs-1 text-danger"></ion-icon>
-      }
-    }
+    <ion-icon name="cube" class=" fs-1 text-primary"></ion-icon>
   </div>
 
-  <div style="font-size: 19px;" class="text-black d-flex  align-items-end w-100 px-2">
+  <div style="font-size: 20px;" class="text-black d-flex  align-items-center w-100 px-2">
     <span>{{ title() }}</span>
   </div>
 </div>

@@ -1,14 +1,18 @@
 <div>
-
-
   @if (formService.inerDataReady()) {
-
     <app-custom-form
-    (outputSchema)="submitForm($event)"
-    [url]="formService.resource()"
-    [inputSchema]="formService.configs()"></app-custom-form>
+      (outputSchema)="submitForm($event)"
+      [url]="formService.resource()"
+      [inputSchema]="formService.configs()"
+    >
+    <div class="slot-interiores">
+      <h5 class="text-center">Interiores Asignados</h5>
+      @for (interior of  formService.tv.interiores ; track interior) {
+        	<ngb-alert (closed)="closeAndRemoveItem(interior)" type="primary" >{{ interior.etiqueta }}</ngb-alert>
+
+      }
+    </div>
+  </app-custom-form>
   }
-
-
 
 </div>

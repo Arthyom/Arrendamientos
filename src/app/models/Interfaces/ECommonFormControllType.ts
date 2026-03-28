@@ -8,6 +8,7 @@ export enum EnumCommonFormControllType{
   radioButton = 'radio',
   hidden='hidden',
   date = 'date',
+  slot = 'slot',
 }
 
 export enum EnumReciboType{

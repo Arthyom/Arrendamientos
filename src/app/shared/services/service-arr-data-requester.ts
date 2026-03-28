@@ -10,7 +10,7 @@ import { FileSaverService } from 'ngx-filesaver';
   providedIn: 'root',
 })
 export class ServiceArrDataRequester {
-  private _httpCliente = inject(HttpClient);
+  public _httpCliente = inject(HttpClient);
   private _fileSaver = inject(FileSaverService);
 
   // private _resourceName = inject( RESOURCE_NAME  );

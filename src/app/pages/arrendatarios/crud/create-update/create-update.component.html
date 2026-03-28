@@ -1,9 +1,14 @@
 <div>
+  @if (formService.inerDataReady()) {
+
+
 
     <app-custom-form
     (outputSchema)="submitForm($event)"
-    [url]="url()"
-    [inputSchema]="s()"></app-custom-form>
+    [url]="formService.resource()"
+    [inputSchema]="formService.configs()"></app-custom-form>
 
+
+  }
 
 </div>

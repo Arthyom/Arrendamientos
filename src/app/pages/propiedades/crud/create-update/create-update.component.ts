@@ -3,6 +3,7 @@ import {
   Component,
   computed,
   inject,
+  OnDestroy,
   OnInit,
   signal,
 } from '@angular/core';
@@ -23,36 +24,40 @@ import { AppOpStateService } from '../../../../shared/services/app-op-state';
 import { event } from 'jquery';
 import { MapperFormValues } from '../../../../models/Mappers/MapperFormValues';
 import { ServiceFacedeForm } from '../../../../shared/services/service-facede-form';
+import { Interior } from '../../../../models/Entities/interior';
+import { NgbAlert } from '@ng-bootstrap/ng-bootstrap';
+import { BaseComponent } from '../../../../models/base/BaseComponent';
 
 @Component({
   selector: 'app-create-update',
   standalone: true,
-  imports: [CustomFormComponent, JsonPipe],
+  imports: [CustomFormComponent, JsonPipe, NgbAlert],
   templateUrl: './create-update.component.html',
   styleUrl: './create-update.component.scss',
 })
-export class CreateUpdateComponent implements OnInit {
-  constructor(
-    private _router: ActivatedRoute,
-    private _location: Location,
-    private _inf: InfiniteLoaderService,
-    private _service: ServiceArrDataRequester,
-    private _stateService: AppOpStateService,
-    public formService: ServiceFacedeForm<Propiedad>,
-  ) {
-    this.formService.setInjectors(
-      this._router,
-      this._location,
-      this._inf,
-      this._service,
-      this._stateService,
+export class CreateUpdateComponent extends BaseComponent<Propiedad> {
+  interiores: Interior[] = [];
+
+  constructor() {
+    super(
+      inject(ActivatedRoute),
+      inject(Location),
+      inject(InfiniteLoaderService),
+      inject(ServiceArrDataRequester),
+      inject(AppOpStateService),
+      inject(ServiceFacedeForm),
       'propiedades',
     );
   }
 
-  async ngOnInit() {
+  override ngOnDestroy(): void {
+    this.formService.cleanConfigs();
+  }
+
+  override async ngOnInit() {
     this.formService.setStateForLoader(true);
     await this.formService.loadValuesWithId();
+    await this.getInteriores();
     this.formService.setValues({
       groups: {
         infoBase: {
@@ -63,14 +68,6 @@ export class CreateUpdateComponent implements OnInit {
               label: 'Alias',
               control: new FormControl(
                 this.formService.tv.alias,
-                Validators.required,
-              ),
-            },
-
-            nombre: {
-              label: 'Nombre',
-              control: new FormControl(
-                this.formService.tv.nombre,
                 Validators.required,
               ),
             },
@@ -91,18 +88,20 @@ export class CreateUpdateComponent implements OnInit {
               ),
             },
 
-            interior: {
-              label: 'Interior',
-              control: new FormControl(
-                this.formService.tv.interior,
-                Validators.required,
-              ),
-            },
-
             municipio: {
               label: 'Municipio',
               control: new FormControl(
                 this.formService.tv.municipio,
+                Validators.required,
+              ),
+            },
+
+            cp:{
+              label: 'Codigo Postal',
+              maxLength: 5,
+              minLength: 5,
+              control: new FormControl(
+                this.formService.tv.cp,
                 Validators.required,
               ),
             },
@@ -126,18 +125,21 @@ export class CreateUpdateComponent implements OnInit {
         infoAdicional: {
           label: 'Info. Adicional',
           controlls: {
-            libre: {
-              label: 'Libre',
-              control: new FormControl(this.formService.tv.libre),
-              type: EnumCommonFormControllType.checkBox,
+            interiores: {
+              label: 'Interiores',
+              additionalData: MapperFormValues.convertToKeyValueArray(
+                this.interiores,
+                'etiqueta',
+              ),
+              type: EnumCommonFormControllType.comboIntegerInteger,
+              control: new FormControl(null),
             },
 
-            typeProperty: {
-              additionalData: MapperFormValues.convertTo(EnumTypeProperty),
-              type: EnumCommonFormControllType.comboIntegerInteger,
-              label: 'Tipo de Propiedad',
-              control: new FormControl(this.formService.tv.typeProperty),
-            },
+            slotInteriores: {
+              label: 'slot-interiores',
+              type: EnumCommonFormControllType.slot,
+              control: new FormControl(null),
+            }
           },
         },
       },
@@ -146,7 +148,30 @@ export class CreateUpdateComponent implements OnInit {
     this.formService.setStateForLoader(false);
   }
 
+  async getInteriores() {
+    if (!this.formService.tv.id) return;
+    this.interiores = await firstValueFrom(
+      await this._service.getById<Interior[]>(
+        'interiores/GetAllByPropiedad',
+        this.formService.tv.id,
+      ),
+    );
+  }
+
   async submitForm(event: any) {
+    debugger;
+    event.infoBase.Nombre = "Test";
+    this.formService.tv.interiores?.forEach((interior) => interior.propiedad = this.formService.tv)
+    this.formService.tv.interiores?.forEach((interior) => interior.propiedad!.interiores = [])
+    event.infoAdicional = {
+      interiores: this.formService.tv.interiores,
+    };
     await this.formService.submitForm(event);
+  }
+
+  closeAndRemoveItem(interior: Interior) {
+
+    this.formService.tv.interiores = this.formService.tv.interiores
+    ?.filter((i) => i.id !== interior.id);
   }
 }

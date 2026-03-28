@@ -1,5 +1,6 @@
 import { BaseEntity } from "../base/base-entity";
 import { EnumTypeProperty } from "../Enums/EnumTypeProperty";
+import { Arrendatario } from "./arrendatario";
 import { Propiedad } from "./propiedad";
 
 export class Interior extends BaseEntity{
@@ -14,4 +15,5 @@ export class Interior extends BaseEntity{
     colonia!: string;
     propiedadId!:string;
     propiedad?: Propiedad;
+    arrendatario?: Arrendatario;
 }

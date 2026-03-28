@@ -9,6 +9,7 @@ import { ServiceArrDataRequester } from './service-arr-data-requester';
 import { firstValueFrom } from 'rxjs';
 import { Location } from '@angular/common';
 import { MapperFormValues } from '../../models/Mappers/MapperFormValues';
+import { environment } from '../../../environments/environment.development';
 
 @Injectable({
   providedIn: 'root',
@@ -59,7 +60,7 @@ export class ServiceFacedeForm<Tout> {
   }
 
   setValues(values: ICommonCustomForm) {
-    this.configs.set(values);
+    this.configs.update((c) => c = values);
     this.inerDataReady.set(true);
   }
 
@@ -70,10 +71,42 @@ export class ServiceFacedeForm<Tout> {
       const mapped = MapperFormValues.fromObject<Tout>(values);
       const url = mapped.id ?  `${this.resource()}/${mapped.id}` : `${this.resource()}`;
 
+      if (!this.tv) {
+        await firstValueFrom(await this._service.put<Tout>(url, mapped));
+      } else {
+        await firstValueFrom(
+          await this._service._httpCliente.request<Tout>('PATCH', `${environment.backEndBaseUrl}/${url}`, {
+            body: mapped,
+          }),
+        );
+      }
+
+      setTimeout(() => {
+        this._stateService.setSuccessState(true);
+      }, 1000);
+    } catch (error) {
+      setTimeout(() => {
+        this._stateService.setErrorState(true);
+      }, 1000);
+    }
+
+    this._inf.showLoader.set(false);
+
+    this._location.back();
+  }
+
+    async submitFormRaw(values: any, method: string) {
+    this._inf.showLoader.set(true);
+
+    try {
+      // const mapped = MapperFormValues.fromObject<Tout>(values);
+      const url = values.id ?  `${environment.backEndBaseUrl}/${this.resource()}/${values.id}` : `${this.resource()}`;
+
       const s = await firstValueFrom(
-        await this._service.put<Tout>(
+        await this._service._httpCliente.request<Tout>(
+          method,
           url,
-          mapped,
+          {body: values},
         ),
       );
 
@@ -125,5 +158,11 @@ export class ServiceFacedeForm<Tout> {
 
   setStateForLoader(state: boolean) {
     this._inf.showLoader.set(state);
+  }
+
+  cleanConfigs() {
+    this.configs.set(undefined);
+    this.inerDataReady.set(false);
+    this.tv = {} as Tout;
   }
 }

@@ -162,6 +162,10 @@
                               />
                             }
 
+                            @case (t.slot) {
+                              <ng-content [select]="itemControll.value.label"></ng-content>
+                            }
+
                             @default {
                               <input
                                 [ngClass]="{
@@ -185,7 +189,7 @@
                             }
                           }
 
-                          @if (itemControll.value.type != t.checkBox) {
+                          @if (itemControll.value.type != t.checkBox && itemControll.value.type != t.slot) {
                             <label>{{ itemControll.value.label }}</label>
                           }
                         </div>

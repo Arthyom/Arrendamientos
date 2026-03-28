@@ -44,7 +44,7 @@
       let i = $index
     ) {
       <app-card-collapsable>
-        <div class="smTitle d-flex flex-column gap-1 pt-0">
+        <div class="smTitle d-flex flex-column gap-1 pt-0 w-100 ">
           <!-- <app-arrendatario-icon-tool
           [title]="propiedad.direccion"
           [typeProperty]="propiedad?.typeProperty">
@@ -58,9 +58,19 @@
 
           <!-- <span class="text-muted" style="font-size: 14px;">{{propiedad?.direccion}}</span> -->
 
-          <span class="text-muted" style="font-size: 20px">
-            {{ propiedad?.interior }}
-          </span>
+          <!-- <span class="text-muted pt-2" style="font-size: 15px">
+            Interiores: {{ propiedad?.interiores?.length ?? 0 }}
+          </span> -->
+
+          <div class="container mt-1">
+            <div class="row align-items-center">
+              @for (interior of propiedad.interiores; track $index) {
+                <div class="text-muted col-4 my-1 " style="font-size: 14px">
+                 {{ interior.alias }}
+              </div>
+              }
+            </div>
+          </div>
         </div>
         <div class="smBody">
           <div

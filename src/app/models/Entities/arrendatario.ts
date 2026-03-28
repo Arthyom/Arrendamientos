@@ -19,4 +19,6 @@ export class Arrendatario extends BaseEntity{
   cp?: string;
   interiores?: Interior [];
 
+    email?: string;
+
 }
