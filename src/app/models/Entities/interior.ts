@@ -9,11 +9,13 @@ export class Interior extends BaseEntity{
     precio!: number;
     typeProperty!: EnumTypeProperty;
     libre!: boolean;
+
+    propiedadId!:string;
+    propiedad?: Propiedad;
+    arrendatario?: Arrendatario;
+
     direccion!: string;
     interior?:string;
     municipio!: string;
     colonia!: string;
-    propiedadId!:string;
-    propiedad?: Propiedad;
-    arrendatario?: Arrendatario;
 }

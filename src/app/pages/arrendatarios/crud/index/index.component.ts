@@ -124,7 +124,7 @@ export class IndexComponent implements OnInit {
     this.showMultiReport.update(  () => true)
   }
 
-  async createReport(arrendatarioId: number, propiedadId: number) {
+  async createReport(arrendatarioId: number, propiedadId: number, interiorId: number) {
     this._inf.showLoader.update(x => x = true)
     const data: Recibo = {
       propiedadId,
@@ -134,6 +134,7 @@ export class IndexComponent implements OnInit {
       fechaPago: null,
       pagado: true,
       id: 0,
+      interiorId
     };
 
     const response = await firstValueFrom( await  this._arrendatariosService.post<Recibo>('recibos', data) );

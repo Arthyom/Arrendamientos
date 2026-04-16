@@ -1,0 +1,47 @@
+  <app-modal-container [showModal]="showSelector()">
+    <h3 class="fw-bold w-100 text-center" header>Seleccione Arrendatario</h3>
+    <div body>
+      <app-arrendatario-select
+        (controlClose)="showSelector.set($event)"
+        [interior]="selectedInterior()"
+      ></app-arrendatario-select>
+    </div>
+  </app-modal-container>
+
+
+<app-custom-table [configs]="tableConfigs">
+  <!-- Small Screens' section -->
+  <div class="card-items p-0">
+    @for (item of tableConfigs.tableData; track item.id; let i = $index) {
+      <app-card-collapsable>
+        <div class="smTitle d-flex flex-column w-100">
+          <h3>{{ item.alias }}</h3>
+
+          <div class="d-flex flex-row w-100 align-items-center pe-3">
+            <span class="bg-primary rounded-circle m-2 p-2"> </span>
+            <span class="flex-grow-1">
+              {{ item.propiedad?.direccion }}
+            </span>
+            <span class="bg-success px-2 py-1 rounded">
+              {{ item.etiqueta }}
+            </span>
+          </div>
+        </div>
+        <div class="smBody w-100">
+          <app-button-actions [itemId]="item.id">
+            @if (!item.arrendatario) {
+              <button
+              (click)="showSelector.set(true) ; selectedInterior.set(item)"
+                type="button"
+                class="btn btn-outline-info border-black"
+                ngbTooltip="Arrendatario"
+              >
+                <ion-icon name="person" style="color: black"></ion-icon>
+              </button>
+            }
+          </app-button-actions>
+        </div>
+      </app-card-collapsable>
+    }
+  </div>
+</app-custom-table>

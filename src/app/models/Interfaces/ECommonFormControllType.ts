@@ -9,6 +9,7 @@ export enum EnumCommonFormControllType{
   hidden='hidden',
   date = 'date',
   slot = 'slot',
+  label='label'
 }
 
 export enum EnumReciboType{

@@ -1,14 +1,51 @@
 <div>
-
-
   @if (formService.inerDataReady()) {
-
     <app-custom-form
-    (outputSchema)="submitForm($event)"
-    [url]="formService.resource()"
-    [inputSchema]="formService.configs()"></app-custom-form>
+      (outputSchema)="submitForm($event)"
+      [url]="formService.resource()"
+      [inputSchema]="formService.configs()"
+    >
+      <div class="row mb-2">
+        <div class="col-12 p-0">
+          <button
+            class="btn btn-primary w-100"
+            (click)="addNewAdditionalCondition($event)"
+          >
+            <ion-icon name="add"></ion-icon>
+          </button>
+        </div>
+        <div class="col-12 mt-4">
+          <div class="form-group">
+            @if (fgAdditionalCondition()) {
+              <form [formGroup]="fgAdditionalCondition()!">
+                @for (aditionaItem of fgAdditionalCondition()?.controls | keyvalue; track aditionaItem.key) {
+                    <div class="row mt-2">
+
+                      <div class="col-10 p-0">
+                        <textarea
+                          [formControlName]="aditionaItem.key"
+                          class="form-control"
+                          rows="2"
+                          class="w-100 h-100"
+                        ></textarea>
+                      </div>
+
+                      <div class="col-2 ps-2 pe-0  d-flex flex-column ">
+                        <button class="btn btn-danger btn-lg w-100 h-100"
+                        (click)="removeCondition(aditionaItem.key)"
+                        >
+                          <ion-icon name="trash"></ion-icon>
+                        </button>
+                      </div>
+
+                    </div>
+
+                }
+              </form>
+            }
+          </div>
+        </div>
+      </div>
+    </app-custom-form>
   }
-
-
-
 </div>

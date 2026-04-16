@@ -17,5 +17,6 @@ export class Recibo extends BaseEntity {
   tipoRecibo?: EnumReciboType;
   reImpresion?: ReImpresion[];
   importe?: number;
+  interiorId?: number;
 }
 

@@ -1,5 +1,5 @@
 import { Component, OnInit, signal } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { InfiniteLoaderService } from '../../../../../shared/services/infinite-loader-service';
@@ -14,15 +14,17 @@ import { MapperFormValues } from '../../../../models/Mappers/MapperFormValues';
 import { AppOpStateService } from '../../../../shared/services/app-op-state';
 import { ServiceArrDataRequester } from '../../../../shared/services/service-arr-data-requester';
 import { ServiceFacedeForm } from '../../../../shared/services/service-facede-form';
-import { JsonPipe, Location } from '@angular/common';
+import { JsonPipe, KeyValuePipe, Location } from '@angular/common';
 import { CustomFormComponent } from '../../../../shared/custom-form/custom-form.component';
 import { Interior } from '../../../../models/Entities/interior';
 import { Contrato } from '../../../../models/Entities/contrato';
+import { IonIcon } from "@ionic/angular/standalone";
+import { NgbAccordionItem } from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
   selector: 'app-create-update',
   standalone: true,
-  imports: [JsonPipe, CustomFormComponent],
+  imports: [KeyValuePipe, JsonPipe, CustomFormComponent, IonIcon, NgbAccordionItem, ReactiveFormsModule],
   templateUrl: './create-update.component.html',
   styleUrl: './create-update.component.scss',
 })
@@ -30,7 +32,7 @@ export class CreateUpdateComponent implements OnInit {
   arrendatarios: Arrendatario[] = [];
   propiedades: Propiedad[] = [];
   interiores: Interior[] = [];
-
+  fgAdditionalCondition = signal<FormGroup | null>(null);
 
   constructor(
     private _router: ActivatedRoute,
@@ -39,6 +41,7 @@ export class CreateUpdateComponent implements OnInit {
     private _service: ServiceArrDataRequester,
     private _stateService: AppOpStateService,
     public formService: ServiceFacedeForm<Contrato>,
+    private _fb: FormBuilder
   ) {
     this.formService.setInjectors(
       this._router,
@@ -48,6 +51,8 @@ export class CreateUpdateComponent implements OnInit {
       this._stateService,
       'contratos',
     );
+
+    this.fgAdditionalCondition.set( null );
   }
 
   async ngOnInit() {
@@ -72,7 +77,7 @@ export class CreateUpdateComponent implements OnInit {
             },
             apellidoMaterno: {
               label: 'Apellido Materno',
-              control: new FormControl(null, Validators.required  ),
+              control: new FormControl(null, Validators.required),
             },
             telefono: {
               label: 'telefono',
@@ -96,34 +101,56 @@ export class CreateUpdateComponent implements OnInit {
             },
           },
         },
-        infoAdicionalArrendatario: {
-          label: 'Info Extra Arrendatario',
+        infoBasicaFiador: {
+          label: 'Info Base Fiador',
           order: 0,
           controlls: {
-            cp: {
-              type: EnumCommonFormControllType.number ,
-              label: 'Código Postal',
-              control: new FormControl(),
+            nombre: {
+              label: 'Nombre',
+              control: new FormControl(null, Validators.required),
             },
-            rfc: {
-              label: 'RFC',
-              control: new FormControl(),
+            apellidoPaterno: {
+              label: 'Apellido Paterno',
+              control: new FormControl(null, Validators.required),
             },
-            curp: {
-              label: 'CURP',
-              control: new FormControl(),
-            }
-          }
+            apellidoMaterno: {
+              label: 'Apellido Materno',
+              control: new FormControl(null, Validators.required),
+            },
+            telefono: {
+              label: 'telefono',
+              control: new FormControl(null, Validators.required),
+            },
+            alias: {
+              label: 'Alias',
+              control: new FormControl(null, Validators.required),
+            },
+            direccion: {
+              label: 'Direccion',
+              control: new FormControl(null, Validators.required),
+            },
+            municipio: {
+              label: 'Municipio',
+              control: new FormControl(null, Validators.required),
+            },
+            colonia: {
+              label: 'Colonia',
+              control: new FormControl(null, Validators.required),
+            },
+          },
         },
+
         infoBasePropiedad: {
           label: 'Info. Propiedad',
           order: 1,
           controlls: {
-
             arrendadorId: {
               type: EnumCommonFormControllType.hidden,
               label: '',
-              control: new FormControl(this.formService.tv.arrendadorId, Validators.required),
+              control: new FormControl(
+                1,
+                Validators.required,
+              ),
             },
 
             propiedadId: {
@@ -135,13 +162,15 @@ export class CreateUpdateComponent implements OnInit {
                 'direccion',
               ),
               customFunction: this.loadInteriores.bind(this),
-
             },
 
             interiorId: {
               type: EnumCommonFormControllType.comboIntegerInteger,
               label: 'Interior',
-              control: new FormControl(this.formService.tv.interiorId, Validators.required),
+              control: new FormControl(
+                this.formService.tv.interiorId,
+                Validators.required,
+              ),
               additionalData: MapperFormValues.convertToKeyValueArray(
                 this.interiores,
                 'etiqueta',
@@ -155,6 +184,17 @@ export class CreateUpdateComponent implements OnInit {
             },
           },
         },
+        condicionesAdicionales: {
+          label: 'Condiciones Adicionales',
+          order: 2,
+          controlls: {
+            fechaInicio: {
+              type: EnumCommonFormControllType.slot,
+              label: 'aditionalConditions',
+              control: new FormControl(null),
+            },
+          },
+        },
       },
     });
 
@@ -162,14 +202,36 @@ export class CreateUpdateComponent implements OnInit {
   }
 
   async submitForm(event: any) {
-    delete event['infoBase'].pagado;
-    event['infoBase'].tipoRecibo = Number(event['infoBase'].tipoRecibo);
-    event['infoBase'].identificador = 'test';
+    // delete event['infoBase'].pagado;
+    // event['infoBase'].tipoRecibo = Number(event['infoBase'].tipoRecibo);
+    // event['infoBase'].identificador = 'test';
+    event['condicionesAdicionales'] = [];
 
-    const response = await this.formService.submitFormAndResponse(event);
+    debugger
+
+    for (const key in this.fgAdditionalCondition()?.value) {
+      event['condicionesAdicionales'].push (
+       this.fgAdditionalCondition()?.value[key]
+      )
+    }
+
+
+    const mappedPayload : Contrato  = {
+      arrendadorId: 1,
+      interiorId: event['infoBasePropiedad'].interiorId,
+      propiedadId: event['infoBasePropiedad'].propiedadId,
+      arrendatario: event['infoBasicaArrendatario'],
+      condicionesAdicionales: event['condicionesAdicionales'].join(','),
+      fiador: event['infoBasicaFiador'],
+      id: 0
+    };
+
+    debugger
+
+    const response = await this.formService.submitFormAndResponse(mappedPayload);
     if (response) {
       this.formService._inf.showLoader.set(true);
-      await this._service.getByIdAsBlob('recibos/documento', response.id);
+      await this._service.getByIdAsBlob('contratos/documento', response.id);
       this.formService._inf.showLoader.set(false);
       console.log(response);
     }
@@ -193,36 +255,49 @@ export class CreateUpdateComponent implements OnInit {
     const valueSelected = select.options[indexSelected].value;
 
     this._inf.showLoader.set(true);
-    this.interiores = await firstValueFrom( await this._service.getById<Interior[]>('interiores/getAllByPropiedad', Number(valueSelected)) ) ;
+    this.interiores = await firstValueFrom(
+      await this._service.getById<Interior[]>(
+        'interiores/getAllByPropiedad',
+        Number(valueSelected),
+      ),
+    );
     this._inf.showLoader.set(false);
 
-
-
-    this.formService.configs.update( d => {
-
-
-      if(d){
-        d
-        .groups['infoBasePropiedad']
-        .controlls['interiorId']
-        .additionalData = MapperFormValues.convertToKeyValueArray(
-          this.interiores,
-          'alias',
-        );
-
-
+    this.formService.configs.update((d) => {
+      if (d) {
+        d.groups['infoBasePropiedad'].controlls['interiorId'].additionalData =
+          MapperFormValues.convertToKeyValueArray(this.interiores, 'alias');
       }
 
-
-
       return d;
-    })
-
-
+    });
 
     // this.interiores.set( i );
 
-    console.log('logevent',event);
+    console.log('logevent', event);
     // alert('cargar interiores');
+  }
+
+  removeCondition(controlName:string) {
+    this.fgAdditionalCondition.update( (d) =>{
+      d?.removeControl(controlName!);
+      return d;
+    });
+  }
+
+  addNewAdditionalCondition(evento: any) {
+    const item = evento.target as HTMLTextAreaElement;
+    const id = crypto.randomUUID();
+
+    if(this.fgAdditionalCondition()){
+      this.fgAdditionalCondition.update( d => {
+        d?.addControl(id, new FormControl(null, Validators.required));
+        return d;
+      })
+    }
+    else{
+      this.fgAdditionalCondition.set(this._fb.group({ [id]: new FormControl(null, Validators.required) }));
+    }
+
   }
 }

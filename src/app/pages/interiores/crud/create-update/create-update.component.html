@@ -1,0 +1,18 @@
+<div>
+  @if (formService.inerDataReady()) {
+
+
+
+    <app-custom-form
+    (outputSchema)="submitForm($event)"
+    [url]="formService.resource()"
+    [inputSchema]="formService.configs()">
+    <div class="propiedad text-center bg-primary text-white p-2 rounded">
+      {{ formService.tv.propiedad?.direccion }}
+    </div>
+    </app-custom-form>
+
+
+  }
+
+</div>

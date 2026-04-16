@@ -12,6 +12,8 @@ import { ArrendatariosActionRoutes } from "./arrendatarios/ArrendatariosAction.r
 import { FiadoresActionRoutes } from "./fiadores/fiadoresAction.routes";
 import { ContratosActionRoutes } from "./contratos/contratosAction.routes";
 import { RecibosActionRoutes } from "./recibos/recibossAction.routes";
+import { InterioresComponent } from "./interiores/interiores.component";
+import { InterioresActionRoutes } from "./interiores/interiores.routes";
 
 export const pagesRoutes: Routes = [
   {
@@ -55,4 +57,10 @@ export const pagesRoutes: Routes = [
     component: RecibosComponent,
     children: RecibosActionRoutes,
   },
+  {
+    title :"Interiores",
+    path: "interiores",
+    component: InterioresComponent,
+    children: InterioresActionRoutes,
+  }
 ];

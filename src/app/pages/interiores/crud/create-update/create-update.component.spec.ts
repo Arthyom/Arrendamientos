@@ -1,0 +1,24 @@
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { IonicModule } from '@ionic/angular';
+
+import { CreateUpdateComponent } from './create-update.component';
+
+describe('CreateUpdateComponent', () => {
+  let component: CreateUpdateComponent;
+  let fixture: ComponentFixture<CreateUpdateComponent>;
+
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [ CreateUpdateComponent ],
+      imports: [IonicModule.forRoot()]
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(CreateUpdateComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  }));
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+});
