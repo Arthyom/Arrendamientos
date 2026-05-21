@@ -15,5 +15,10 @@ export class Propiedad extends BaseEntity {
   cp?: string;
   propiedadId!:string;
   interiores?: Interior[];
+
+  numeroServicioCfe?: string;
+  cuentaAgua?:string;
+
+
 }
 

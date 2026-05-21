@@ -16,4 +16,8 @@ export interface ICommonFormControll{
   hidden?: boolean;
   additionalData?: IKeyValue[];
 
+  useInformationTool?: boolean;
+
+  informationToolText?: string;
+
 }

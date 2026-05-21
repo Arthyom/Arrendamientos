@@ -96,13 +96,13 @@ export class ServiceFacedeForm<Tout> {
   }
 
     async submitFormRaw(values: any, method: string) {
-    this._inf.showLoader.set(true);
 
-    try {
+      try {
+      this._inf.showLoader.set(true);
       // const mapped = MapperFormValues.fromObject<Tout>(values);
-      const url = values.id ?  `${environment.backEndBaseUrl}/${this.resource()}/${values.id}` : `${this.resource()}`;
+      const url = values.id ?  `${environment.backEndBaseUrl}/${this.resource()}/${values.id}` : `${environment.backEndBaseUrl}/${this.resource()}`;
 
-      const s = await firstValueFrom(
+      const response =  await firstValueFrom(
         await this._service._httpCliente.request<Tout>(
           method,
           url,
@@ -110,18 +110,28 @@ export class ServiceFacedeForm<Tout> {
         ),
       );
 
-      setTimeout(() => {
-        this._stateService.setSuccessState(true);
-      }, 1000);
+      this._inf.showLoader.set(false);
+
+      if(response){
+        setTimeout(() => {
+       this._stateService.setSuccessState(true);
+        }, 1000);
+      }
+
+      this._location.back();
+
+      return response
+
     } catch (error) {
+      this._inf.showLoader.set(false);
+      this._location.back();
       setTimeout(() => {
         this._stateService.setErrorState(true);
       }, 1000);
     }
 
-    this._inf.showLoader.set(false);
+    return null;
 
-    this._location.back();
   }
 
 

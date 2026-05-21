@@ -22,6 +22,7 @@ import {
   NgbAccordionBody,
   NgbAccordionCollapse,
   NgbScrollSpy,
+  NgbTooltip,
 } from '@ng-bootstrap/ng-bootstrap';
 import { ICommonCustomForm } from '../../models/Interfaces/ICommonFormCustom';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -48,6 +49,7 @@ import { firstValueFrom } from 'rxjs/internal/firstValueFrom';
     NgbAccordionToggle,
     NgbAccordionBody,
     NgbAccordionCollapse,
+    NgbTooltip,
     FormsModule,
     ReactiveFormsModule,
     CommonModule,

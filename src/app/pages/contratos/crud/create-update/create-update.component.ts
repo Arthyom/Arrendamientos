@@ -223,12 +223,13 @@ export class CreateUpdateComponent implements OnInit {
       arrendatario: event['infoBasicaArrendatario'],
       condicionesAdicionales: event['condicionesAdicionales'].join(','),
       fiador: event['infoBasicaFiador'],
-      id: 0
+      id: 0,
+      interior: null
     };
 
-    debugger
 
-    const response = await this.formService.submitFormAndResponse(mappedPayload);
+    const response = await this.formService.submitFormRaw(mappedPayload, 'post');
+    debugger
     if (response) {
       this.formService._inf.showLoader.set(true);
       await this._service.getByIdAsBlob('contratos/documento', response.id);

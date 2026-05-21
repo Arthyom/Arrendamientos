@@ -49,6 +49,20 @@ export class CreateUpdateComponent extends BaseComponent<Interior> {
           label: 'Información básica',
           controlls: {
 
+            numeroCuentaCfe: {
+              label: 'Número de servicio (CFE)',
+              control: new FormControl(
+                this.formService.tv.numeroServicioCfe,
+              ),
+            },
+
+            cuentaAgua: {
+              label: 'Cuenta Agua (SMAPAM)',
+              control: new FormControl(
+                this.formService.tv.cuentaAgua,
+              ),
+            },
+
             propiedadPadre:{
               label: 'Propiedad',
               type: EnumCommonFormControllType.slot,
@@ -89,6 +103,10 @@ export class CreateUpdateComponent extends BaseComponent<Interior> {
                 Validators.required,
               ),
             },
+
+
+
+
 
             libre: {
               label: 'Libre',

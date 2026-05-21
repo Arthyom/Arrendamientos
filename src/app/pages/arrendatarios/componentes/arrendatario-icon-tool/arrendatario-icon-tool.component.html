@@ -1,10 +1,22 @@
 <div class="d-flex flex-row  fw-bolder gap-1">
   <div class="d-flex align-items-center ">
-    <ion-icon
-      ngbTooltip="Pagado"
-      name="checkmark-circle"
-      class="text-success fs-1"
-    ></ion-icon>
+    @if(interiores().length > 0) {
+
+      @if(interiores()[0].pagado) {
+        <ion-icon
+          ngbTooltip="Pagado"
+          name="checkmark-circle"
+          class="text-success fs-1"
+        ></ion-icon>
+      }
+      @else {
+        <ion-icon
+          ngbTooltip="Adeudo"
+          name="close-circle"
+          class="text-danger fs-1"
+        ></ion-icon>
+      }
+    }
     <!-- <ion-icon name="close-circle" class="text-danger"></ion-icon> -->
   </div>
   @if (interiores().length >0) {

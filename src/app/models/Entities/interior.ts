@@ -18,4 +18,9 @@ export class Interior extends BaseEntity{
     interior?:string;
     municipio!: string;
     colonia!: string;
+
+    pagado?: boolean;
+
+    numeroServicioCfe?: string;
+    cuentaAgua?:string;
 }

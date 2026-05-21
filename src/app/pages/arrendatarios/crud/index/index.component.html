@@ -41,9 +41,7 @@
           >
             <app-button-actions [itemId]="arrendatario.id">
               <button
-                (click)="
-                  createReport(arrendatario.id, 0, 0)
-                "
+
                 type="button"
                 class="btn btn-outline-info border-black"
                 ngbTooltip="Recibo Mes Actual"
@@ -55,9 +53,7 @@
               </button>
 
               <button
-                (click)="
-                  openMultiReport(arrendatario.id, 0)
-                "
+
                 type="button"
                 class="btn btn-outline-success border-black"
                 ngbTooltip="Recibo Mes Especifico"
@@ -140,7 +136,8 @@
                       (click)="
                         openMultiReport(
                           arrendatario.id,
-                          arrendatario.interiores[0].propiedad?.id ?? 0
+                          arrendatario.interiores[0]?.propiedadId ?? '0',
+                          arrendatario.interiores[0]?.id ?? 0
                         )
                       "
                       type="button"
@@ -191,7 +188,8 @@
                             (click)="
                               openMultiReport(
                                 arrendatario.id,
-                                interior.propiedad?.id ?? 0
+                                interior?.propiedadId ?? '0',
+                                interior?.id ?? 0
                               )
                             "
                             type="button"

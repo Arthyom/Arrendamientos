@@ -1,6 +1,7 @@
 import { BaseEntity } from "../base/base-entity"
 import { Arrendatario } from "./arrendatario";
 import { Fiador } from "./fiador";
+import { Interior } from './interior';
 
 export class Contrato extends BaseEntity {
 
@@ -13,6 +14,7 @@ export class Contrato extends BaseEntity {
 
   fiador?: Fiador;
   arrendatario?: Arrendatario;
+  interior?: Interior|null;
 
   condicionesAdicionales?: string[];
 

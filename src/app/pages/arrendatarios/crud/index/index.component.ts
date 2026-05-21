@@ -20,6 +20,7 @@ import { ArrendatarioIconToolComponent } from "../../componentes/arrendatario-ic
 import { InfiniteLoaderService } from '../../../../../shared/services/infinite-loader-service';
 import { EnumTypeProperty } from '../../../../models/Enums/EnumTypeProperty';
 import { ActivatedRoute } from '@angular/router';
+import { Interior } from '../../../../models/Entities/interior';
 
 
 @Component({
@@ -56,6 +57,8 @@ export class IndexComponent implements OnInit {
   public showMultiReport = signal(false);
   public signalArrendatarioId = signal(0);
   public signalPropiedadId = signal(0);
+    public signalInteriorId = signal(0);
+
 
   t = EnumTypeProperty;
 
@@ -83,13 +86,14 @@ export class IndexComponent implements OnInit {
 
     const recibos = $event.months.map( month =>{
        const recibo: Recibo ={
-        propiedadId: this.signalArrendatarioId(),
+        propiedadId: this.signalPropiedadId(),
         identificador:'test',
         arrendadorId:1,
         arrendatarioId: this.signalArrendatarioId(),
         pagado: true,
         id:0,
-        fechaPago: `${$event.year}-${month.id.toString().padStart(2, '0')}-01`
+        fechaPago: `${$event.year}-${month.id.toString().padStart(2, '0')}-01`,
+        interiorId: this.signalInteriorId(),
        }
        return recibo;
     });
@@ -118,9 +122,11 @@ export class IndexComponent implements OnInit {
 
   }
 
-  openMultiReport(arrId:number, propId:number) {
+  openMultiReport(arrId:number, propId:string, interiorId:number) {
+    debugger
     this.signalArrendatarioId.update( () => arrId);
-    this.signalPropiedadId.update( () => propId)
+    this.signalPropiedadId.update( () => Number(propId))
+    this.signalInteriorId.update( () => interiorId )
     this.showMultiReport.update(  () => true)
   }
 
@@ -134,7 +140,7 @@ export class IndexComponent implements OnInit {
       fechaPago: null,
       pagado: true,
       id: 0,
-      interiorId
+      interiorId,
     };
 
     const response = await firstValueFrom( await  this._arrendatariosService.post<Recibo>('recibos', data) );

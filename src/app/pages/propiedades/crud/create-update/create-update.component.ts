@@ -88,6 +88,20 @@ export class CreateUpdateComponent extends BaseComponent<Propiedad> {
               ),
             },
 
+            numeroServicioCfe: {
+              label: 'Numero de Servicio (CFE)',
+              control: new FormControl(
+                this.formService.tv.numeroServicioCfe,
+              ),
+            },
+
+            cuentaAgua: {
+              label: 'Cuenta Agua (SMAPAM)',
+              control: new FormControl(
+                this.formService.tv.cuentaAgua,
+              ),
+            },
+
             municipio: {
               label: 'Municipio',
               control: new FormControl(
