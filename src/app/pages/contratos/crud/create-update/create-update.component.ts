@@ -154,6 +154,7 @@ export class CreateUpdateComponent implements OnInit {
             },
 
             propiedadId: {
+              order: 1,
               type: EnumCommonFormControllType.comboIntegerInteger,
               label: 'Propiedad',
               control: new FormControl(null, Validators.required),
@@ -165,6 +166,7 @@ export class CreateUpdateComponent implements OnInit {
             },
 
             interiorId: {
+              order: 2,
               type: EnumCommonFormControllType.comboIntegerInteger,
               label: 'Interior',
               control: new FormControl(
@@ -207,7 +209,7 @@ export class CreateUpdateComponent implements OnInit {
     // event['infoBase'].identificador = 'test';
     event['condicionesAdicionales'] = [];
 
-    debugger
+
 
     for (const key in this.fgAdditionalCondition()?.value) {
       event['condicionesAdicionales'].push (
@@ -229,7 +231,7 @@ export class CreateUpdateComponent implements OnInit {
 
 
     const response = await this.formService.submitFormRaw(mappedPayload, 'post');
-    debugger
+
     if (response) {
       this.formService._inf.showLoader.set(true);
       await this._service.getByIdAsBlob('contratos/documento', response.id);

@@ -2,13 +2,25 @@
   <form [formGroup]="generalFormGroup">
     <div ngbAccordion>
       @for (
-        item of inputSchema()!.groups | keyvalue;
+        item of inputSchema()!.groups | keyvalue: sortGroups;
         track $index;
         let i = $index
       ) {
-        <div ngbAccordionItem [collapsed]="true">
-          <h2 ngbAccordionHeader>
-            <button ngbAccordionButton>{{ item.value.label }}</button>
+        <div ngbAccordionItem  [collapsed]="true">
+          <h2 ngbAccordionHeader class="">
+            <button ngbAccordionButton>
+              <span class=" d-flex flex-row">
+                <ion-icon *ngIf="!allControlAreValid(item.value)" name="alert-circle" color="danger" size="large" class="align-self-center me-2" ></ion-icon>
+                <span class="align-self-center">
+                  <h5>
+                    <b>
+                      {{ item.value.label }}
+                    </b>
+                  </h5>
+                </span>
+
+              </span>
+            </button>
           </h2>
 
           <div ngbAccordionCollapse>
@@ -21,24 +33,16 @@
                     let j = $index
                   ) {
                     @for (
-                      itemControll of controll | keyvalue;
+                      itemControll of controll | keyvalue: sortControlls;
                       track $index;
                       let z = $index
                     ) {
                       <div
                         [ngClass]="{ 'd-none': itemControll.value.hidden }"
-                        class="col-md-6 col-md-6 col-sm-12 "
+                        class="col-md-12 col-md-12 col-sm-12 "
                       >
-                        <div class="input-group mb-2">
-                          @if(itemControll.value.useInformationTool) {
-                          <div class="input-group-prepend">
-                            <span placement="right" [ngbTooltip]="itemControll.value.informationToolText" class="p-0 border-0 bg-white input-group-text me-2 h-100" id="basic-addon1"
-                              >
-                              <ion-icon name="help-circle" size="large"></ion-icon>
-                            </span
-                            >
-                          </div>
-                        }
+                        <div class="input-group mb-12">
+
 
                           <div class="form-floating">
                             @switch (itemControll.value.type) {
@@ -123,9 +127,15 @@
 
                               @case (t.textArea) {
                                 <textarea
+                                [formControlName]="itemControll.key"
+                                  [ngClass]="{
+                                    'is-invalid':
+                                      !itemControll.value.control.valid &&
+                                      itemControll.value.control.touched,
+                                  }"
                                   class="form-control"
                                   style="height: 80px"
-                                ></textarea>
+                                >{{ itemControll.value.control.value }}</textarea>
                               }
 
                               @case (t.checkBox) {
@@ -211,6 +221,20 @@
                               <label>{{ itemControll.value.label }}</label>
                             }
                           </div>
+
+                           @if(itemControll.value.useInformationTool) {
+                          <div class="input-group-append ">
+                            <span
+                            placement="left"
+                            [ngbTooltip]="itemControll.value.informationToolText"
+                            class="p-0 border-0 bg-white input-group-text ms-2 me-0 h-100"
+                            id="basic-addon1"
+                              >
+                              <ion-icon name="help-circle" size="large"></ion-icon>
+                            </span
+                            >
+                          </div>
+                        }
                         </div>
                       </div>
                     }

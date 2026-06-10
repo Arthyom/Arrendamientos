@@ -34,7 +34,8 @@ export class ServiceArrDataRequester {
 
   public async getByIdAsBlob(
     resourceName: string,
-    id: number
+    id: number,
+    fileName?: string
   ): Promise<boolean> {
     try {
       const response = await firstValueFrom(
@@ -46,7 +47,9 @@ export class ServiceArrDataRequester {
 
   const contentDisposition = response.headers.get('content-disposition');
 
-      this._fileSaver.save(response.body, 'tes.pdf');
+      const fileNameAndExt = fileName ? fileName : 'test';
+
+      this._fileSaver.save(response.body, fileNameAndExt);
 
     } catch (error) {
       return false;

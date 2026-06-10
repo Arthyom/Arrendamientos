@@ -41,7 +41,7 @@ export class AppArrendatarioSelectComponent  implements OnInit {
     this.interior()!.arrendatario = this.selectedArrendatario();
     this.interior()!.propiedad!.interiores = undefined;
     this.interior()!.typeProperty = Number( this.interior()!.typeProperty );
-    debugger
+
     this._inf.showLoader.set(true);
     const response = await firstValueFrom(
       await this._serviceArrDataRequester._httpCliente.request<Interior>(

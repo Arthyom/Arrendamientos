@@ -1,4 +1,4 @@
-import { JsonPipe, CommonModule, Location } from '@angular/common';
+import { JsonPipe, CommonModule, Location, KeyValue } from '@angular/common';
 import {
   Component,
   inject,
@@ -34,6 +34,8 @@ import { MapperFormValues } from '../../models/Mappers/MapperFormValues';
 import { InfiniteLoaderService } from '../../../shared/services/infinite-loader-service';
 import { ServiceArrDataRequester } from '../services/service-arr-data-requester';
 import { firstValueFrom } from 'rxjs/internal/firstValueFrom';
+import { ICommonFormControll } from '../../models/Interfaces/ICommonFormControll';
+import { ICommonFormGroup } from '../../models/Interfaces/ICommonFormGroup';
 
 @Component({
   selector: 'app-custom-form',
@@ -74,6 +76,26 @@ export class CustomFormComponent implements OnInit {
     this.generalFormGroup = this._fb.group({});
   }
 
+  allControlAreValid( formGroup: ICommonFormGroup) {
+    let valid = true;
+    for (const key in formGroup.controlls) {
+      const control = formGroup.controlls[key];
+      if(control.control.touched)
+      valid = valid && control.control.valid ;
+    }
+    return valid;
+  }
+
+  sortControlls = (a: KeyValue<string,ICommonFormControll>, b: KeyValue<string,ICommonFormControll>): number => {
+    return (a.value.order || 0) > (b.value.order || 0) ? 1 : -1;
+
+}
+
+  sortGroups = (a: KeyValue<string,ICommonFormGroup>, b: KeyValue<string,ICommonFormGroup>): number => {
+    return (a.value.order || 0) > (b.value.order || 0) ? 1 : -1;
+
+}
+
   ngOnInit() {
     if (this.inputSchema() != undefined) {
       console.log('cosas en el init', this.inputSchema());
@@ -85,14 +107,21 @@ export class CustomFormComponent implements OnInit {
         ),
       );
 
+      const sortedControlls = [];
       for (const groupItemKey in sortedObject) {
         const controll = this.inputSchema()!.groups[groupItemKey].controlls;
         const controllObject: any = {};
         for (const controlKey in controll)
+        {
           controllObject[controlKey] = controll[controlKey].control;
+          sortedControlls.push(controll[controlKey]);
+        }
 
         this._formTemplate[groupItemKey] = this._fb.group(controllObject);
       }
+
+      ;
+
 
       this.generalFormGroup = this._fb.group(this._formTemplate);
     }

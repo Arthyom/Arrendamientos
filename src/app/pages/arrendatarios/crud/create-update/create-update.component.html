@@ -3,10 +3,17 @@
 
 
 
-    <app-custom-form
+  <app-custom-form
     (outputSchema)="submitForm($event)"
     [url]="formService.resource()"
-    [inputSchema]="formService.configs()"></app-custom-form>
+    [inputSchema]="formService.configs()">
+
+    <div class="text-center">
+        <a [routerLink]="[ '/admin/propiedades/edit', formService.tv.id]" > Detalles de la propiedad</a>
+
+    </div>
+
+  </app-custom-form>
 
 
   }

@@ -21,6 +21,7 @@ import { InfiniteLoaderService } from '../../../../../shared/services/infinite-l
 import { EnumTypeProperty } from '../../../../models/Enums/EnumTypeProperty';
 import { ActivatedRoute } from '@angular/router';
 import { Interior } from '../../../../models/Entities/interior';
+import { MapperRecibos } from '../../../../models/Mappers/MapperRecibos';
 
 
 @Component({
@@ -123,7 +124,7 @@ export class IndexComponent implements OnInit {
   }
 
   openMultiReport(arrId:number, propId:string, interiorId:number) {
-    debugger
+
     this.signalArrendatarioId.update( () => arrId);
     this.signalPropiedadId.update( () => Number(propId))
     this.signalInteriorId.update( () => interiorId )
@@ -145,28 +146,28 @@ export class IndexComponent implements OnInit {
 
     const response = await firstValueFrom( await  this._arrendatariosService.post<Recibo>('recibos', data) );
 
-    const recibo =   await this._arrendatariosService.getByIdAsBlob('recibos/documento', response.id);
+    const fileName = MapperRecibos.extractRecipientFileName(response);
+
+    const recibo =   await this._arrendatariosService.getByIdAsBlob('recibos/documento', response.id, fileName);
 
     this._inf.showLoader.update(x => x = false);
+
+    await  this.getArrendatarios()
   }
 
   async ngOnInit() {
+    await this.getArrendatarios();
+  }
+
+  private async getArrendatarios(){
     this._inf.showLoader.update((x) => true);
     (
       await this._arrendatariosService.getAll<Arrendatario>(this.resourceName())
     ).subscribe((data) => {
       this.tableConfigs.tableData = data;
-      // data.forEach(async (x) => {
-      //   if (x.propiedadId && x.propiedadId > 0) {
-      //     // x.propiedad = await firstValueFrom(
-      //     //   await this._propiedadService.getById<Propiedad>(
-      //     //     'propiedades',
-      //     //     x.propiedadId
-      //     //   )
-      //     // );
-      //   }
-      // });
       this._inf.showLoader.update((x) => false);
     });
   }
 }
+
+

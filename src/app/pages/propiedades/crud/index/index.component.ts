@@ -11,6 +11,8 @@ import { InfiniteLoaderService } from '../../../../../shared/services/infinite-l
 import { firstValueFrom } from 'rxjs';
 import { ServiceArrDataRequester } from '../../../../shared/services/service-arr-data-requester';
 import { PropiedadIconToolComponent } from '../../componentes/propiedad-icon-tool/propiedad-icon-tool.component';
+import { RouterOutlet } from '@angular/router';
+import { NgbNavContent, NgbNav, NgbNavItem, NgbNavItemRole, NgbNavLinkButton, NgbNavLinkBase, NgbNavOutlet } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-index',
@@ -22,6 +24,17 @@ import { PropiedadIconToolComponent } from '../../componentes/propiedad-icon-too
     ArrendatarioIconToolComponent,
     CardCollapsableComponent,
     CustomTableComponent,
+
+           RouterOutlet,
+              RouterOutlet,
+                NgbNavContent,
+                NgbNav,
+                NgbNavItem,
+                NgbNavItemRole,
+                NgbNavLinkButton,
+                NgbNavLinkBase,
+                NgbNavOutlet,
+                IonIcon
   ],
   templateUrl: './index.component.html',
   styleUrl: './index.component.scss',

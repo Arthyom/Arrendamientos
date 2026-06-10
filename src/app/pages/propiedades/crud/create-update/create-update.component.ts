@@ -88,12 +88,12 @@ export class CreateUpdateComponent extends BaseComponent<Propiedad> {
               ),
             },
 
-            numeroServicioCfe: {
-              label: 'Numero de Servicio (CFE)',
-              control: new FormControl(
-                this.formService.tv.numeroServicioCfe,
-              ),
-            },
+            // numeroServicioCfe: {
+            //   label: 'Numero de Servicio (CFE)',
+            //   control: new FormControl(
+            //     this.formService.tv.numeroServicioCfe,
+            //   ),
+            // },
 
             cuentaAgua: {
               label: 'Cuenta Agua (SMAPAM)',
@@ -144,6 +144,7 @@ export class CreateUpdateComponent extends BaseComponent<Propiedad> {
               additionalData: MapperFormValues.convertToKeyValueArray(
                 this.interiores,
                 'etiqueta',
+                ['alias']
               ),
               type: EnumCommonFormControllType.comboIntegerInteger,
               control: new FormControl(null),
@@ -173,7 +174,7 @@ export class CreateUpdateComponent extends BaseComponent<Propiedad> {
   }
 
   async submitForm(event: any) {
-    debugger;
+    ;
     event.infoBase.Nombre = "Test";
     this.formService.tv.interiores?.forEach((interior) => interior.propiedad = this.formService.tv)
     this.formService.tv.interiores?.forEach((interior) => interior.propiedad!.interiores = [])

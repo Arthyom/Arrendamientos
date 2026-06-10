@@ -24,14 +24,22 @@ export class MapperFormValues {
     return mapped as Tout;
   }
 
-  public static convertToKeyValueArray( input: any[],  valueName: string = 'value' ): IKeyValue[]{
+  public static convertToKeyValueArray( input: any[],  valueName: string = 'value', additionalValues: string[]  | null = null ): IKeyValue[]{
    const mapped : IKeyValue[] = [];
 
     input.forEach( item => {
+      let value = "";
+
+      additionalValues?.forEach( (adValue) =>{
+        value += "- " +item[adValue] ;
+      })
+
       mapped.push({
         key: item.id,
-        value: item[valueName]
+        value: item[valueName] + " " + value
       } as IKeyValue);
+
+
     });
 
     return mapped;

@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, computed, effect, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { InfiniteLoaderService } from '../../../../../shared/services/infinite-loader-service';
 import { Propiedad } from '../../../../models/Entities/propiedad';
@@ -18,6 +18,8 @@ import { Recibo } from '../../../../models/Entities/recibo';
 import { Arrendatario } from '../../../../models/Entities/arrendatario';
 import { firstValueFrom } from 'rxjs';
 import { Interior } from '../../../../models/Entities/interior';
+import { event, map } from 'jquery';
+import { MapperRecibos } from '../../../../models/Mappers/MapperRecibos';
 
 @Component({
   selector: 'app-create-update',
@@ -30,6 +32,9 @@ export class CreateUpdateComponent {
   arrendatarios: Arrendatario[] = [];
   propiedades: Propiedad[] = [];
   interiores = signal<Interior[]>([]);
+  conceptoTemplateConst = `{recipientType} - {PropertyName} {DepNum} - {info}`;
+
+  conceptoTemplate = `{recipientType} - {PropertyName} {DepNum} - {info}`;
 
   constructor(
     private _router: ActivatedRoute,
@@ -62,16 +67,19 @@ export class CreateUpdateComponent {
           order: 1,
           controlls: {
             concepto: {
+              order: 5,
               label: 'Concepto',
               control: new FormControl(
-                this.formService.tv.concepto,
+                this.formService.tv.concepto || undefined,
                 Validators.required,
               ),
+              type: EnumCommonFormControllType.textArea,
             },
 
             fechaPago: {
+              order: 6,
               type: EnumCommonFormControllType.date,
-              label: 'Fecha de Pago',
+              label: 'Fecha de Emision',
               control: new FormControl(
                 this.formService.tv.fechaPago,
                 Validators.required,
@@ -79,29 +87,35 @@ export class CreateUpdateComponent {
             },
 
             total: {
-              label: 'Precio Unitario',
+              order: 7,
+              label: 'Total',
               control: new FormControl(
                 this.formService.tv.total,
                 Validators.required,
               ),
+              useInformationTool: true,
+              informationToolText: 'El total por el que se realizara el recibo',
             },
 
             importe: {
               type: EnumCommonFormControllType.number,
               label: 'Importe',
               control: new FormControl(this.formService.tv.importe),
+              hidden: true,
             },
 
             pagado: {
+              order: 8,
               type: EnumCommonFormControllType.checkBox,
               label: 'Pagado',
               control: new FormControl(this.formService.tv.pagado),
             },
 
             arrendatarioId: {
+              order: 1,
               type: EnumCommonFormControllType.comboIntegerInteger,
               label: 'Arrendatario',
-              control: new FormControl(this.formService.tv.arrendatarioId || 0),
+              control: new FormControl(this.formService.tv.arrendatarioId, Validators.required),
               additionalData: MapperFormValues.convertToKeyValueArray(
                 this.arrendatarios,
                 'alias',
@@ -109,9 +123,10 @@ export class CreateUpdateComponent {
             },
 
             propiedadId: {
+              order: 3,
               type: EnumCommonFormControllType.comboIntegerInteger,
               label: 'Propiedad',
-              control: new FormControl(this.formService.tv.propiedadId || 0),
+              control: new FormControl(this.formService.tv.propiedadId, Validators.required),
               additionalData: MapperFormValues.convertToKeyValueArray(
                 this.propiedades,
                 'direccion',
@@ -120,22 +135,34 @@ export class CreateUpdateComponent {
             },
 
             interiorId: {
+              order: 4,
               type: EnumCommonFormControllType.comboIntegerInteger,
               label: 'Interior',
-              control: new FormControl(this.formService.tv.interiorId || 0),
+              control: new FormControl(this.formService.tv.interiorId, Validators.required),
               additionalData: MapperFormValues.convertToKeyValueArray(
                 this.interiores(),
                 'alias',
               ),
+              customFunction: (event: any)=>{
+                const combo = event.target as HTMLSelectElement;
+
+                const selectedInteriores = this.interiores()
+                if(selectedInteriores.length > 0){
+                  this.setOrInitConceptoTemplate('{DepNum}', selectedInteriores.find(i => i.id === +combo.value)?.etiqueta  || '');
+                  this.updateConcepto();
+                }
+              }
             },
 
             tipoRecibo: {
               type: EnumCommonFormControllType.comboIntegerInteger,
+              order:2,
               label: 'Tipo de Recibo',
-              control: new FormControl(this.formService.tv.tipoRecibo),
+              control: new FormControl(this.formService.tv.tipoRecibo, Validators.required),
               additionalData: MapperFormValues.convertTo(EnumReciboType),
               useInformationTool: true,
-              informationToolText: 'Selecciona el tipo de recibo que deseas generar',
+              informationToolText: 'Selecciona el tipo de recibo a generar',
+              customFunction: this.setConceptoTemplate.bind(this),
             },
 
             id: {
@@ -151,6 +178,18 @@ export class CreateUpdateComponent {
     this.formService.setStateForLoader(false);
   }
 
+  private updateConcepto() {
+        this.formService.configs.update((val) => {
+      if (val) {
+        val.groups['infoBase'].controlls['concepto'].control.setValue(
+          this.conceptoTemplate,
+        );
+      }
+
+      return val;
+    });
+  }
+
   async submitForm(event: any) {
     delete event['infoBase'].pagado;
     event['infoBase'].tipoRecibo = Number(event['infoBase'].tipoRecibo);
@@ -160,7 +199,9 @@ export class CreateUpdateComponent {
     const response = await this.formService.submitFormAndResponse(event);
     if (response) {
       this.formService._inf.showLoader.set(true);
-      await this._service.getByIdAsBlob('recibos/documento', response.id);
+
+      const fileName = MapperRecibos.extractRecipientFileName(response);
+      await this._service.getByIdAsBlob('recibos/documento', response.id, fileName);
       this.formService._inf.showLoader.set(false);
       console.log(response);
     }
@@ -178,11 +219,47 @@ export class CreateUpdateComponent {
     );
   }
 
-  private async loadInteriores(event: any) {
+  private setConceptoTemplate(event: any) {
+    ;
+    const combo = event.target as HTMLSelectElement;
+    const selectedValue = +combo.value as EnumReciboType;
+    switch (selectedValue) {
+      case EnumReciboType.deposito:
+        this.setOrInitConceptoTemplate('{recipientType}', 'Deposito');
+        break;
 
+      case EnumReciboType.normal:
+        this.setOrInitConceptoTemplate('{recipientType}', 'Renta');
+        break;
+
+      case EnumReciboType.liquidacion:
+        this.setOrInitConceptoTemplate('{recipientType}', 'Liquidacion');
+        break;
+
+
+
+      default:
+        break;
+    }
+    this.updateConcepto();
+  }
+
+  private setConceptoGlobal() {
+    this.formService.configs.update((val) => {
+      if (val) {
+        val.groups['infoBase'].controlls['concepto'].control.setValue(
+          this.conceptoTemplate,
+        );
+      }
+
+      return val;
+    });
+  }
+
+  private async loadInteriores(event: any) {
     this._inf.showLoader.set(true);
     const combo = event.target as HTMLSelectElement;
-    debugger;
+    ;
 
     const ints = await firstValueFrom(
       await this._service.getById<Interior[]>(
@@ -191,18 +268,45 @@ export class CreateUpdateComponent {
       ),
     );
 
-    const mappedResponse = MapperFormValues.convertToKeyValueArray(ints, 'alias') ?? [];
+    this.interiores.set(ints);
+    const mappedResponse =
+      MapperFormValues.convertToKeyValueArray(ints, 'alias') ?? [];
 
-    this.formService.configs.update( (val)=>{
+    this.setOrInitConceptoTemplate('{PropertyName}', combo.options[combo.selectedIndex].text);
 
-      if(val){
-        val.groups['infoBase'].controlls['interiorId'].additionalData = mappedResponse;
+    this.updateConcepto();
+
+    this.formService.configs.update((val) => {
+      if (val) {
+        val.groups['infoBase'].controlls['interiorId'].additionalData =
+          mappedResponse;
       }
 
       return val;
     });
 
     this._inf.showLoader.set(false);
+  }
+
+
+  private setOrInitConceptoTemplate(marker :string, value: string) {
+
+    if(this.conceptoTemplate.includes(marker)){
+      this.conceptoTemplate = this.conceptoTemplate.replace(marker, value);
+    }else{
+      const constTemplateSplited = this.conceptoTemplateConst.split(' - ');
+      const modifiesConceptoTemplate = this.conceptoTemplate.split(' - ');
+      const markerIndex = constTemplateSplited.findIndex(m => m === marker);
+      if(markerIndex >=0){
+
+        modifiesConceptoTemplate[markerIndex] = value;
+
+        this.conceptoTemplate = modifiesConceptoTemplate.join(' - ');
+
+      }
+    }
 
   }
+
+
 }

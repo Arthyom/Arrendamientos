@@ -12,7 +12,7 @@ import { ServiceArrDataRequester } from '../../../../shared/services/service-arr
 import { Propiedad } from '../../../../models/Entities/propiedad';
 import { firstValueFrom } from 'rxjs';
 import { InfiniteLoaderService } from '../../../../../shared/services/infinite-loader-service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Arrendatario } from '../../../../models/Entities/arrendatario';
 import { MapperFormValues } from '../../../../models/Mappers/MapperFormValues';
 import { EnumTypeProperty } from '../../../../models/Enums/EnumTypeProperty';
@@ -31,6 +31,7 @@ import { BaseComponent } from '../../../../models/base/BaseComponent';
     ReactiveFormsModule,
     CommonModule,
     CustomFormComponent,
+    RouterLink
   ],
   templateUrl: './create-update.component.html',
   styleUrl: './create-update.component.scss',
@@ -177,6 +178,11 @@ export class CreateUpdateComponent extends BaseComponent<Arrendatario> {
                 this.propiedades,
                 'direccion',
               ),
+            },
+            link:{
+              type: EnumCommonFormControllType.slot,
+              label: 'Detalles',
+              control: new FormControl(null),
             },
             interiores: {
               type: EnumCommonFormControllType.comboIntegerInteger,

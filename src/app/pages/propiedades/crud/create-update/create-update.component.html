@@ -8,7 +8,7 @@
     <div class="slot-interiores">
       <h5 class="text-center">Interiores Asignados</h5>
       @for (interior of  formService.tv.interiores ; track interior) {
-        	<ngb-alert (closed)="closeAndRemoveItem(interior)" type="primary" >{{ interior.etiqueta }}</ngb-alert>
+        	<ngb-alert (closed)="closeAndRemoveItem(interior)" type="primary" >{{ interior.etiqueta }} ({{interior.alias}})</ngb-alert>
 
       }
     </div>

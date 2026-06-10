@@ -1,3 +1,50 @@
+<div class="my-3">
+  <ul ngbNav #nav="ngbNav" class="nav-tabs">
+    <li [ngbNavItem]="1">
+      <button ngbNavLink>Nuevo</button>
+      <ng-template ngbNavContent>
+        <div class="d-flex flex-row gap-3 py-3">
+          <button class="btn btn-primary w-100" >
+            <ion-icon name="add-circle" size="large"></ion-icon>
+          </button>
+        </div>
+      </ng-template>
+    </li>
+    <li [ngbNavItem]="2">
+      <button ngbNavLink>Filtros</button>
+      <ng-template ngbNavContent>
+        <div class="d-flex flex-row gap-3 py-3">
+          <select
+            class="form-select form-select"
+            aria-label=".form-select-lg example"
+          >
+            <option selected>Open this select menu</option>
+            <option value="1">One</option>
+            <option value="2">Two</option>
+            <option value="3">Three</option>
+          </select>
+
+          <select
+            class="form-select form-select"
+            aria-label=".form-select-lg example"
+          >
+            <option selected>Open this select menu</option>
+            <option value="1">One</option>
+            <option value="2">Two</option>
+            <option value="3">Three</option>
+          </select>
+        </div>
+      </ng-template>
+    </li>
+  </ul>
+</div>
+
+<div [ngbNavOutlet]="nav" class="mt-2"></div>
+
+
+
+
+
 <app-custom-table [configs]="tableConfigs">
   <!-- Large screens' section -->
   <tbody class="table-items">
@@ -9,17 +56,8 @@
       <tr>
         <th scope="row">{{ i + 1 }}</th>
         <td>
-          <!-- <img
-                [src]="'https://upload.wikimedia.org/wikipedia/commons/' + arrendatario.flag"
-                [alt]="'The flag of ' + arrendatario.name"
-                class="me-2"
-                style="width: 20px"
-              /> -->
           {{ propiedad.alias }}
         </td>
-        <!-- <td>
-          {{arrendatario.nombre}}{{ arrendatario.apellidoPaterno }} {{ arrendatario.apellidoMaterno }}
-        </td> -->
         <td>
           {{ propiedad.alias }}
         </td>
@@ -37,7 +75,7 @@
   </tbody>
 
   <!-- Small Screens' section -->
-  <div class="card-items p-0">
+  <div class="card-items pb-0">
     @for (
       propiedad of tableConfigs.tableData;
       track propiedad;
@@ -53,20 +91,11 @@
           <app-propiedad-icon-tool
             [title]="propiedad.direccion"
           ></app-propiedad-icon-tool>
-
-          <!-- <span class="text-muted" style="font-size: 14px;">{{propiedad?.direccion}}</span> -->
-
-          <!-- <span class="text-muted pt-2" style="font-size: 15px">
-            Interiores: {{ propiedad?.interiores?.length ?? 0 }}
-          </span> -->
-
           <div class="container mt-1">
             <div class="row align-items-center">
-              @for (interior of propiedad.interiores; track $index) {
-                <div class="text-muted col-4 my-1 " style="font-size: 14px">
-                 {{ interior.alias }}
+               <div class="text-muted col-12 my-1 " style="font-size: 14px">
+                 Número de interiores: {{ propiedad?.interiores?.length ?? 0 }}
               </div>
-              }
             </div>
           </div>
         </div>

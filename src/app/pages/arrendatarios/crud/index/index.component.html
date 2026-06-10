@@ -123,6 +123,20 @@
                         createReport(arrendatario.id, arrendatario.interiores[0].propiedad?.id ?? 0, arrendatario.interiores[0]?.id ?? 0)
                       "
                       type="button"
+                      class="btn btn-outline-danger border-black"
+                      ngbTooltip="Marcar adeudo"
+                      placement="top"
+                    >
+                      <ion-icon
+                        style="color: black"
+                        name="alert-circle-outline"
+                      ></ion-icon>
+                    </button>
+                    <button
+                      (click)="
+                        createReport(arrendatario.id, arrendatario.interiores[0].propiedad?.id ?? 0, arrendatario.interiores[0]?.id ?? 0)
+                      "
+                      type="button"
                       class="btn btn-outline-success border-black"
                       ngbTooltip="Recibo Mes Actual"
                       placement="top"
