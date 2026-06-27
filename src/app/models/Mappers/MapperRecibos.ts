@@ -6,7 +6,7 @@ export class MapperRecibos {
     const now = new Date();
 
     if(recipient)
-      return `${now.toLocaleDateString()}-${recipient.concepto}`;
+      return `${now.toLocaleDateString()}-${recipient.concepto}.pdf`;
 
     return 'recibo'+now.toLocaleDateString() + '.pdf';
   }

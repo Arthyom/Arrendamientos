@@ -1,4 +1,4 @@
-<div class="d-flex flex-row  fw-bolder gap-1">
+<div class="d-flex flex-row  fw-bolder gap-1 mb-1 w-100 ">
   <div class="d-flex align-items-center ">
     @if(interiores().length > 0) {
 
@@ -69,7 +69,21 @@
 
   }
 
-  <div style="font-size: 19px;" class="text-black d-flex  align-items-end w-100 px-2">
+  @if (arrendatario()) {
+    @if(arrendatario().adeudos){
+      <div class="d-flex align-items-end  "  [ngbTooltip]="'Adeudos'">
+        <span class="badge bg-danger bagde-lg h-100 d-flex align-items-center">
+          {{arrendatario().adeudos}}
+        </span>
+      </div>
+    }
+  }
+
+  <div style="font-size: 25px;" class="text-black d-flex  align-items-center w-100 px-2">
     <span>{{ title() }}</span>
   </div>
+  <div>
+  </div>
 </div>
+
+<hr class="mb-1 mt-0 p-0"/>

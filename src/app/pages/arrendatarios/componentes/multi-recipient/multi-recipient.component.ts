@@ -19,6 +19,9 @@ export class MultiRecipientComponent  implements OnInit {
 
   yearStart = signal<number>( new Date().getFullYear())
 
+  isRecipient = true
+
+
   constructor() { }
 
   ngOnInit() {}
@@ -39,12 +42,16 @@ export class MultiRecipientComponent  implements OnInit {
     {name: 'Diciembre', id:12},
   ]
 
+  isAnyMonthSelected (): boolean{
+    return this.monthNames.find( (x)=> x.selected === true) !== undefined;
+  }
 
   ok(){
     const selectedMonths = this.monthNames.filter(x => x.selected)
     this.monthsSelected.emit({
       year: this.yearStart(),
-      months: this.monthNames.filter(x => x.selected)
+      months: this.monthNames.filter(x => x.selected),
+      asPayed: this.isRecipient
     })
   }
 

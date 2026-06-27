@@ -8,6 +8,15 @@
   </div>
 </app-modal-container>
 
+<app-modal-container [showModal]="showAlreadyCreatedRecipient()">
+  <h3 class="fw-bold w-100 text-center" header>
+    Info
+  </h3>
+  <div body>
+    <p>El Recibo o los recibos en masa ya han sido creados</p>
+  </div>
+</app-modal-container>
+
 <app-custom-table [configs]="tableConfigs">
   <!-- Large screens' section -->
   <tbody class="table-items">
@@ -78,10 +87,11 @@
       let i = $index
     ) {
       <app-card-collapsable>
-        <div class="smTitle d-flex flex-column gap-1 pt-3">
+        <div class="smTitle d-flex flex-column gap-1 pt-3 me-3 w-100">
 
           @if (arrendatario.interiores && arrendatario.interiores) {
             <app-arrendatario-icon-tool
+              [arrendatario]="arrendatario"
               [title]="arrendatario.alias"
               [interiores]="arrendatario.interiores"
             >
@@ -120,7 +130,7 @@
                   <app-button-actions [itemId]="arrendatario.id">
                     <button
                       (click)="
-                        createReport(arrendatario.id, arrendatario.interiores[0].propiedad?.id ?? 0, arrendatario.interiores[0]?.id ?? 0)
+                        createAdeudo(arrendatario.id, arrendatario.interiores[0].propiedad?.id ?? 0, arrendatario.interiores[0]?.id ?? 0)
                       "
                       type="button"
                       class="btn btn-outline-danger border-black"
@@ -129,12 +139,12 @@
                     >
                       <ion-icon
                         style="color: black"
-                        name="alert-circle-outline"
+                        name="wallet"
                       ></ion-icon>
                     </button>
                     <button
                       (click)="
-                        createReport(arrendatario.id, arrendatario.interiores[0].propiedad?.id ?? 0, arrendatario.interiores[0]?.id ?? 0)
+                        createReport(arrendatario.id, arrendatario.interiores[0].propiedad?.id ?? 0, arrendatario.interiores[0]?.id ?? 0, arrendatario)
                       "
                       type="button"
                       class="btn btn-outline-success border-black"
@@ -143,7 +153,7 @@
                     >
                       <ion-icon
                         style="color: black"
-                        name="receipt-outline"
+                        name="document"
                       ></ion-icon>
                     </button>
                     <button
@@ -161,7 +171,7 @@
                     >
                       <ion-icon
                         style="color: black"
-                        name="file-tray-full-outline"
+                        name="documents"
                       ></ion-icon>
                     </button>
                   </app-button-actions>
@@ -186,6 +196,7 @@
                                 arrendatario.id,
                                 interior.propiedad?.id ?? 0,
                                 interior?.id ?? 0
+                                ,arrendatario
                               )
                             "
                             type="button"
@@ -195,7 +206,7 @@
                           >
                             <ion-icon
                               style="color: black"
-                              name="receipt-outline"
+                              name="document-outline"
                             ></ion-icon>
                           </button>
                           <button
@@ -213,7 +224,7 @@
                           >
                             <ion-icon
                               style="color: black"
-                              name="file-tray-full-outline"
+                              name="documents-outline"
                             ></ion-icon>
                           </button>
                         </app-button-actions>

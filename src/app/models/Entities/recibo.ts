@@ -1,5 +1,6 @@
 import { BaseEntity } from "../base/base-entity";
 import { EnumReciboType } from "../Interfaces/ECommonFormControllType";
+import { Arrendatario } from "./arrendatario";
 import { Interior } from "./interior";
 import { ReImpresion } from "./reimpresion";
 
@@ -20,5 +21,6 @@ export class Recibo extends BaseEntity {
   importe?: number;
   interiorId?: number;
   interior?: Interior;
+  arrendatario?: Arrendatario;
 }
 

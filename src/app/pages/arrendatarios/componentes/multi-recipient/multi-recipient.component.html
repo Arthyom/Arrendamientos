@@ -12,6 +12,36 @@
     </select>
   </div>
 
+  <div class="  d-flex justify-content-center">
+    <div class="form-check form-check-inline">
+      <input
+        class="form-check-input bg-success"
+        type="radio"
+        name="inlineRadioOptions"
+        id="pagado"
+        (change)="isRecipient = true"
+      />
+      <label class="form-check-label text-success " for="pagado">Marcar Recibo</label>
+    </div>
+    <div class="form-check form-check-inline">
+      <input
+        class="form-check-input bg-danger"
+        type="radio"
+        name="inlineRadioOptions"
+        id="adeudo"
+        [checked]="!isRecipient"
+        (change)="isRecipient = false"
+
+      />
+      <label class="form-check-label text-danger" for="adeudo">Marcar Adeudo</label>
+    </div>
+  </div>
+
+  <div class="col-12">
+    <hr class=""/>
+  </div>
+
+
   <div class="row m-0">
     @for (col of [0, 6]; track col) {
       <div class="col">
@@ -43,8 +73,13 @@
       </button>
     </div>
     <div class="col">
-      <button (click)="ok()" class=" d-flex justify-content-center btn btn-primary w-100 " type="button">
-        <ion-icon name="checkmark-circle"  size="large"></ion-icon>
+      <button
+        (click)="ok()"
+        class="d-flex justify-content-center btn btn-primary w-100"
+                [disabled]="!isAnyMonthSelected()"
+        type="button"
+      >
+        <ion-icon name="checkmark-circle" size="large"></ion-icon>
       </button>
     </div>
   </div>

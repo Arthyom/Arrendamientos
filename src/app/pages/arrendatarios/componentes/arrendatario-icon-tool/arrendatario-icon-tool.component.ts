@@ -4,6 +4,7 @@ import { EnumTypeProperty } from '../../../../models/Enums/EnumTypeProperty';
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 import { Propiedad } from '../../../../models/Entities/propiedad';
 import { Interior } from '../../../../models/Entities/interior';
+import { Arrendatario } from '../../../../models/Entities/arrendatario';
 
 @Component({
   selector: 'app-arrendatario-icon-tool',
@@ -22,6 +23,7 @@ export class ArrendatarioIconToolComponent  implements OnInit {
   typeProperty = input<EnumTypeProperty>()
   typeProperties = EnumTypeProperty;
   interiores = input.required<Interior[]>()
+  arrendatario = input.required<Arrendatario>()
 
   constructor() { }
 
