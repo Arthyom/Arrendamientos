@@ -1,12 +1,14 @@
 <app-modal-container [showModal]="showMultiReport()">
   <h3 class="fw-bold w-100 text-center" header>Seleccione año y meses</h3>
   <div body>
-    <app-multi-recipient
-      (controlClose)="hideModal($event)"
-      (monthsSelected)="createMultiRecipients($event)"
-    ></app-multi-recipient>
-  </div>
-</app-modal-container>
+      @if (showMultiReport()) {
+      <app-multi-recipient
+        (controlClose)="hideModal($event)"
+        (monthsSelected)="createMultiRecipients($event)"
+      ></app-multi-recipient>
+  }
+    </div>
+  </app-modal-container>
 
 <app-modal-container [showModal]="showAlreadyCreatedRecipient()">
   <h3 class="fw-bold w-100 text-center" header>
@@ -161,7 +163,8 @@
                         openMultiReport(
                           arrendatario.id,
                           arrendatario.interiores[0]?.propiedadId ?? '0',
-                          arrendatario.interiores[0]?.id ?? 0
+                          arrendatario.interiores[0]?.id ?? 0,
+                          arrendatario
                         )
                       "
                       type="button"
@@ -214,7 +217,8 @@
                               openMultiReport(
                                 arrendatario.id,
                                 interior?.propiedadId ?? '0',
-                                interior?.id ?? 0
+                                interior?.id ?? 0,
+                                arrendatario
                               )
                             "
                             type="button"

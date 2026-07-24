@@ -112,7 +112,7 @@ export class CreateUpdateComponent {
             },
 
             arrendatarioId: {
-              order: 1,
+              order: 2,
               type: EnumCommonFormControllType.comboIntegerInteger,
               label: 'Arrendatario',
               control: new FormControl(this.formService.tv.arrendatarioId, Validators.required),
@@ -156,7 +156,7 @@ export class CreateUpdateComponent {
 
             tipoRecibo: {
               type: EnumCommonFormControllType.comboIntegerInteger,
-              order:2,
+              order:1,
               label: 'Tipo de Recibo',
               control: new FormControl(this.formService.tv.tipoRecibo, Validators.required),
               additionalData: MapperFormValues.convertTo(EnumReciboType),
@@ -208,15 +208,51 @@ export class CreateUpdateComponent {
   }
 
   private async loadArrendatarios() {
-    this.arrendatarios = await firstValueFrom(
+    this.arrendatarios.push({
+      id: 0,
+      alias: 'Sin Arrendatario',
+      nombre: 'Sin Arrendatario',
+      apellidoPaterno: '',
+      apellidoMaterno: '',
+      telefono: '',
+      municipio: '',
+      colonia: '',
+      direccion: '',
+      cp: '',
+      email: '',
+      rfc: '',
+    });
+
+    const response = await firstValueFrom(
       await this._service.getAll<Arrendatario>('arrendatarios'),
     );
+    this.arrendatarios = [ ...this.arrendatarios, ...response];
   }
 
+
   private async loadPropiedades() {
-    this.propiedades = await firstValueFrom(
+
+    const defaultPropiedad: Propiedad = {
+      id: 0,
+      alias: 'Sin Propiedad',
+      precio: 0,
+      direccion: 'Sin Propiedad',
+      municipio: '',
+      colonia: '',
+      cp: '',
+      propiedadId:'',
+
+
+    };
+
+
+    const response = await firstValueFrom(
       await this._service.getAll<Propiedad>('propiedades'),
     );
+
+    this.propiedades = [defaultPropiedad, ...response];
+
+
   }
 
   private setConceptoTemplate(event: any) {
@@ -234,6 +270,10 @@ export class CreateUpdateComponent {
 
       case EnumReciboType.liquidacion:
         this.setOrInitConceptoTemplate('{recipientType}', 'Liquidacion');
+        break;
+
+      case EnumReciboType.libre:
+        this.setOrInitConceptoTemplate('{recipientType}', 'Libre');
         break;
 
 
@@ -257,21 +297,40 @@ export class CreateUpdateComponent {
   }
 
   private async loadInteriores(event: any) {
+
+
+
     this._inf.showLoader.set(true);
     const combo = event.target as HTMLSelectElement;
     ;
 
-    const ints = await firstValueFrom(
+    const defaultInterior: Interior = {
+      id: 0,
+      alias: 'Sin Interior',
+      etiqueta: '',
+      colonia: '',
+      municipio: '',
+      libre: false,
+      direccion: '',
+      typeProperty: EnumTypeProperty.Casa,
+      precio: 0,
+      interior: '',
+      propiedadId: ''
+    };
+
+    const ints =  await firstValueFrom(
       await this._service.getById<Interior[]>(
         'Interiores/GetAllByPropiedad',
         +combo.value,
       ),
     );
 
-    this.interiores.set(ints);
-    const mappedResponse =
-      MapperFormValues.convertToKeyValueArray(ints, 'alias') ?? [];
 
+    const newInts = [defaultInterior, ...ints];
+
+    this.interiores.set(newInts);
+    const mappedResponse =
+      MapperFormValues.convertToKeyValueArray(newInts, 'alias') ?? [];
     this.setOrInitConceptoTemplate('{PropertyName}', combo.options[combo.selectedIndex].text);
 
     this.updateConcepto();

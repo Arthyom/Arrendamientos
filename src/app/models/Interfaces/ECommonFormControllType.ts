@@ -15,5 +15,6 @@ export enum EnumCommonFormControllType{
 export enum EnumReciboType{
   normal = 1,
   deposito = 2,
-  liquidacion = 3
+  liquidacion = 3,
+  libre = 4
 }

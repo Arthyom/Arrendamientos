@@ -67,6 +67,7 @@ export class IndexComponent implements OnInit {
   public signalArrendatarioId = signal(0);
   public signalPropiedadId = signal(0);
   public signalInteriorId = signal(0);
+  public signalArrendatario = signal<Arrendatario | null>(null);
   showAlreadyCreatedRecipient = signal(false);
 
   public filterService = inject(ServicioArrendatariosFiltros);
@@ -145,12 +146,17 @@ export class IndexComponent implements OnInit {
       //   );
       // }
 
+
       const resolved = await Promise.all( (promises) );
 
       for (const r of resolved) {
+
+        const fileName = this.signalArrendatario()?.nombre + ' - ' + this.signalArrendatario()?.apellidoPaterno + ' - ' + this.signalArrendatario()?.apellidoMaterno + ' - ' + MapperRecibos.extractRecipientFileName(r);
+
         const reciboDoc = await this._arrendatariosService.getByIdAsBlob(
           'recibos/documento',
           r.id,
+          fileName
         );
       }
       this._inf.showLoader.update(() => false);
@@ -170,10 +176,11 @@ export class IndexComponent implements OnInit {
 
   }
 
-  openMultiReport(arrId: number, propId: string, interiorId: number) {
+  openMultiReport(arrId: number, propId: string, interiorId: number, arrendatario: Arrendatario) {
     this.signalArrendatarioId.update(() => arrId);
     this.signalPropiedadId.update(() => Number(propId));
     this.signalInteriorId.update(() => interiorId);
+    this.signalArrendatario.update(() => arrendatario);
     this.showMultiReport.update(() => true);
   }
 
@@ -211,7 +218,7 @@ export class IndexComponent implements OnInit {
     }
 
     if (response != null) {
-      const fileName = MapperRecibos.extractRecipientFileName(response);
+      const fileName = arrendatario.nombre + ' - ' + arrendatario.apellidoPaterno + ' - ' + arrendatario.apellidoMaterno + ' - ' + MapperRecibos.extractRecipientFileName(response);
       const recibo = await this._arrendatariosService.getByIdAsBlob(
         'recibos/documento',
         response.id,
